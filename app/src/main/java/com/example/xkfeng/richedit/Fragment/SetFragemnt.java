@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.xkfeng.richedit.R;
+
 /**
  * Created by initializing on 2018/5/23.
  */
@@ -16,7 +18,8 @@ public class SetFragemnt extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.set_layout , container , false) ;
+        return view;
 
     }
 }

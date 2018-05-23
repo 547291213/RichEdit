@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
+    android:alpha="255"
     android:layout_height="match_parent">
 
     <com.example.xkfeng.richedit.RoundImage.RoundImage
 
+        android:id="@+id/round_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:scaleType="fitXY"
         android:src="@mipmap/cat"
         />
     <View
+        android:id="@+id/line_view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
+        android:layout_below="@id/round_image"
         android:background="@color/colorPrimary"
         />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/line_1"
+        android:layout_below="@id/line_view"
+        >
 
         <TextView
             style="@style/SetData"
@@ -37,6 +45,8 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/line_2"
+        android:layout_below="@id/line_1"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -54,6 +64,8 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/line_3"
+        android:layout_below="@id/line_2"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -72,6 +84,8 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/line_4"
+        android:layout_below="@id/line_3"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -90,6 +104,8 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/line_5"
+        android:layout_below="@id/line_4"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -107,9 +123,10 @@
             />
     </LinearLayout>
     <Button
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="设置"
-        android:background="@color/waveColor"
+        android:background="@color/waveColor1"
         />
-</LinearLayout>
+</RelativeLayout>
