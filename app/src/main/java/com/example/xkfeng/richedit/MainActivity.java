@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout drawer_relayout ;
     private Fragment SetFragment ;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +96,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         drawer_relayout = (RelativeLayout)findViewById(R.id.drawer_relayout) ;
-        drawer_relayout.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(MainActivity.this, "DRAWER RELATIVELAYOUT" ,Toast.LENGTH_SHORT).show();
-                return true ;
-            };
-        });
+//        drawer_relayout.setOnTouchListener(new View.OnTouchListener(){
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (isDrawer)
+//                {
+//                    //获取屏幕的宽高
+//                    WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+//                    Display display = manager.getDefaultDisplay();
+//                    Toast.makeText(MainActivity.this, "DRAWER RELATIVELAYOUT" ,Toast.LENGTH_SHORT).show();
+//                    drawer_relayout.layout(0, 0,display.getWidth(), display.getHeight());
+//                    isDrawer = false ;
+//                }
+//                return true ;
+//            };
+//        });
        // mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -110,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
                 Display display = manager.getDefaultDisplay();
                 //设置右面的布局位置  根据左面菜单的right作为右面布局的left   左面的right+屏幕的宽度（或者right的宽度这里是相等的）为右面布局的right
-                drawer_relayout.layout(300, 0,  300 + display.getWidth(), display.getHeight());
+                drawer_relayout.layout(SetFragment.getView().getRight(), 0,  SetFragment.getView().getRight() + display.getWidth(), display.getHeight());
             }
             @Override
             public void onDrawerOpened(View drawerView) {
