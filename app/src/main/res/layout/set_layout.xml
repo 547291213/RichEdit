@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <com.example.xkfeng.richedit.RoundImage.RoundImage
+
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitXY"
+        android:src="@mipmap/cat"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
+        />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/SetData"
+            android:text="性别"
+            android:layout_weight="2"
+            />
+        <EditText
+           style="@style/SetData"
+            android:hint="男"
+            android:gravity="right"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/SetData"
+            android:text="年龄"
+            android:layout_weight="2"
+            />
+        <EditText
+            style="@style/SetData"
+            android:hint="18"
+            android:gravity="right"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/SetData"
+            android:text="身高"
+            android:layout_weight="2"
+            />
+        <EditText
+            style="@style/SetData"
+            android:hint="180cm"
+            android:gravity="right"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/SetData"
+            android:text="体重"
+            android:layout_weight="2"
+            />
+        <EditText
+            style="@style/SetData"
+            android:hint="75kg"
+            android:gravity="right"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/SetData"
+            android:text="爱好"
+            android:layout_weight="2"
+            />
+        <EditText
+            style="@style/SetData"
+            android:hint="看书"
+            android:gravity="right"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="设置"
+        android:background="@color/waveColor"
+        />
+</LinearLayout>

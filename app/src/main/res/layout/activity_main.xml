@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.xkfeng.richedit.MainActivity">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/titleLineId"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/title_layout" />
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:id="@+id/layout_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/titleLineId"
+            android:layout_marginBottom="50dp"
+            android:background="#fff"
+            >
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:background="#ed4255"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:id="@+id/homeText"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="首页"
+                android:textColor="#ffffffff"
+                android:textSize="20dp"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/collectionText"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="收藏"
+                android:textSize="20dp"
+                android:textColor="#ffffffff"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/tipText"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="个人中心"
+                android:textSize="20dp"
+                android:textColor="#ffffffff"
+                android:gravity="center"
+                />
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

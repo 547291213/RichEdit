@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:background="#ed4255"
+    >
+    <TextView
+        android:id="@+id/editingText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:ellipsize="marquee"
+        android:gravity="center_horizontal|center"
+        android:singleLine="true"
+        android:text="正在编辑"
+        android:textColor="#ffffffff"
+        android:textSize="20dp"
+
+        />
+
+    <TextView
+        android:id="@+id/backText"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:drawablePadding="6dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:text="返回"
+        android:textColor="#ffffffff"
+        android:textSize="18dp"
+
+        />
+
+    <TextView
+        android:id="@+id/finishText"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:drawablePadding="6dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="确认"
+        android:textSize="18dp"
+        android:textColor="#ffffffff"
+
+        />
+
+    <!--android:focusable="true"-->
+    <!--android:focusableInTouchMode="true"-->
+    <!--android:enabled="true"-->
+</RelativeLayout>

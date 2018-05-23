@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:Wa="http://schemas.android.com/tools">
+
+ <ImageView
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:src="@mipmap/background2"
+     android:scaleType="fitXY"
+     />
+ <LinearLayout
+     android:id="@+id/lineLayoutId"
+     android:orientation="vertical"
+     android:layout_alignParentBottom="true"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content">
+  <com.example.xkfeng.richedit.WaveView
+      android:layout_width="match_parent"
+      android:layout_height="300dp"
+
+      android:id="@+id/waveViewId"
+      />
+ </LinearLayout>
+<TimePicker
+     android:layout_alignParentTop="true"
+     android:layout_width="match_parent"
+     android:timePickerMode="clock"
+     android:layout_height="wrap_content">
+
+ </TimePicker>
+
+
+
+</RelativeLayout>
