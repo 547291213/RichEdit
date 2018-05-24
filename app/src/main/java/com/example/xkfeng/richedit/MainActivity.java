@@ -2,7 +2,11 @@ package com.example.xkfeng.richedit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,8 +32,11 @@ import com.example.xkfeng.richedit.Fragment.HomeFragment;
 import com.example.xkfeng.richedit.Fragment.TipFragment;
 import com.example.xkfeng.richedit.SqlHelper.SqlClass;
 
+import java.util.jar.Manifest;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int REQUEST_CODE = 1 ;
     private TextView setText;
     private TextView addText;
     private TextView homeText;
@@ -49,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment SetFragment ;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +93,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         SetFragment = getSupportFragmentManager().findFragmentById(R.id.id_right_menu) ;
 
+        //获取照相机权限
+        int check = checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) ;
+        if (check!=PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{"android.Manifest.permission.WRITE_EXTERNAL_STORAGE"} ,REQUEST_CODE );
+        }
+        else {
+            Toast.makeText(MainActivity.this , "已经拥有权限" , Toast.LENGTH_SHORT).show();
+        }
         init();
     }
 
@@ -96,21 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         drawer_relayout = (RelativeLayout)findViewById(R.id.drawer_relayout) ;
-//        drawer_relayout.setOnTouchListener(new View.OnTouchListener(){
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (isDrawer)
-//                {
-//                    //获取屏幕的宽高
-//                    WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-//                    Display display = manager.getDefaultDisplay();
-//                    Toast.makeText(MainActivity.this, "DRAWER RELATIVELAYOUT" ,Toast.LENGTH_SHORT).show();
-//                    drawer_relayout.layout(0, 0,display.getWidth(), display.getHeight());
-//                    isDrawer = false ;
-//                }
-//                return true ;
-//            };
-//        });
+
        // mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
                 Display display = manager.getDefaultDisplay();
                 //设置右面的布局位置  根据左面菜单的right作为右面布局的left   左面的right+屏幕的宽度（或者right的宽度这里是相等的）为右面布局的right
-                drawer_relayout.layout(SetFragment.getView().getRight(), 0,  SetFragment.getView().getRight() + display.getWidth(), display.getHeight());
+                drawer_relayout.layout(SetFragment.getView().getRight(), 0,  SetFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
             }
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -170,6 +172,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout_content , tipFragment) ;
             fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        {
+            Toast.makeText(MainActivity.this , "成功获取了权限" , Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(MainActivity.this , "权限获取失败" ,Toast.LENGTH_LONG).show();
         }
     }
 }

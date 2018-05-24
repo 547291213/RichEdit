@@ -25,13 +25,16 @@
       android:id="@+id/waveViewId"
       />
  </LinearLayout>
-<TimePicker
+<TextView
      android:layout_alignParentTop="true"
+     android:layout_margin="40dp"
      android:layout_width="match_parent"
-     android:timePickerMode="clock"
+     android:text="当前版本为测试版本，代码已经上传Github。详情请参考https://github.com/547291213/RichEdit"
+     android:textSize="20sp"
+     android:textColor="#2041ae"
      android:layout_height="wrap_content">
 
- </TimePicker>
+ </TextView>
 
 
 

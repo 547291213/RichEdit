@@ -30,7 +30,10 @@
         android:id="@+id/line_1"
         android:layout_below="@id/line_view"
         >
-
+        <ImageView
+            style="@style/ImageData"
+            android:src="@drawable/people"
+            />
         <TextView
             style="@style/SetData"
             android:text="性别"
@@ -50,7 +53,10 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <ImageView
+            style="@style/ImageData"
+            android:src="@drawable/year"
+            />
         <TextView
             style="@style/SetData"
             android:text="年龄"
@@ -69,7 +75,10 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <ImageView
+            style="@style/ImageData"
+            android:src="@drawable/length"
+            />
         <TextView
             style="@style/SetData"
             android:text="身高"
@@ -77,7 +86,7 @@
             />
         <EditText
             style="@style/SetData"
-            android:hint="180cm"
+            android:hint="180"
             android:gravity="right"
             android:layout_weight="1"
             />
@@ -89,7 +98,10 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <ImageView
+            style="@style/ImageData"
+            android:src="@drawable/tree"
+            />
         <TextView
             style="@style/SetData"
             android:text="体重"
@@ -110,6 +122,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            style="@style/ImageData"
+            android:src="@drawable/pen"
+            />
         <TextView
             style="@style/SetData"
             android:text="爱好"
