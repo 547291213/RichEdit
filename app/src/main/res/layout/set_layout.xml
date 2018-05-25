@@ -6,12 +6,27 @@
     android:alpha="255"
     android:layout_height="match_parent">
 
+    <!--<ImageView-->
+        <!--android:id="@+id/backImageView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="250dp"-->
+        <!--android:src="@drawable/backimage2"-->
+        <!--android:scaleType="center"-->
+        <!--/>-->
+    <com.example.xkfeng.richedit.SqlHelper.MyImageView
+        android:id="@+id/backImageView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+
+
+        />
     <com.example.xkfeng.richedit.RoundImage.RoundImage
 
         android:id="@+id/round_image"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="140dp"
+        android:layout_marginLeft="10dp"
         android:scaleType="fitXY"
         android:src="@mipmap/cat"
         />
@@ -19,7 +34,7 @@
         android:id="@+id/line_view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@id/round_image"
         android:background="@color/colorPrimary"
         />

@@ -41,7 +41,7 @@ public class EditActivity extends AppCompatActivity{
             actionBar.hide();
         }
 
-        sqlClass = new SqlClass(this , SqlClass.TABLE_NAME) ;
+        sqlClass = new SqlClass(this , SqlClass.TABLE_NAME+".db") ;
         db = sqlClass.getWritableDatabase() ;
 
         editingText = (TextView)findViewById(R.id.editingText) ;
