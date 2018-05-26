@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <root-path name="name" path="" />
+    <files-path
+        name="my_images"
+        path="Android/data/com.example.xkfeng.richedit/cache" />
+    <external-path
+        name="cache"
+
+        path="Android/data/com.example.xkfeng.richedit/cache"
+        />
+
+    <!--path="Android/data/com.example.xukefeng.richedit/cache"-->
+    <!--/data/data/com.example.xkfeng.richedit/cache-->
+    <!--<files-path-->
+        <!--name="my_images"-->
+        <!--path="Android/data/com.example.xukefeng.richedit/cache"-->
+        <!--/>-->
+</paths>

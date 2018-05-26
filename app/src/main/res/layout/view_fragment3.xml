@@ -18,21 +18,21 @@
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="登陆"
+        android:text="立即体验"
         android:textSize="30sp"
         android:layout_alignParentBottom="true"
         android:alpha="100"
         android:background="@color/white"
         />
-    <Button
-        android:id="@+id/register_Btn"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_height="50dp"
-        android:text="注册"
-        android:textSize="30sp"
-        android:layout_above="@id/login_Btn"
-        android:alpha="100"
-        android:background="@color/white"
-        />
+    <!--<Button-->
+        <!--android:id="@+id/register_Btn"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:text="注册"-->
+        <!--android:textSize="30sp"-->
+        <!--android:layout_above="@id/login_Btn"-->
+        <!--android:alpha="100"-->
+        <!--android:background="@color/white"-->
+        <!--/>-->
 </RelativeLayout>

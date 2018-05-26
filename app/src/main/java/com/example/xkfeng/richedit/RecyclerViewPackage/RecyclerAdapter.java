@@ -68,7 +68,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 
     @Override
     public int getItemCount() {
-        Log.i("RecyclerAdapter" , "SIZE IS " + editDataList.size())  ;
+      //  Log.i("RecyclerAdapter" , "SIZE IS " + editDataList.size())  ;
         return editDataList.size();
     }
 
