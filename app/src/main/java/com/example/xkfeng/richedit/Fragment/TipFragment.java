@@ -27,6 +27,7 @@ public class TipFragment extends Fragment {
         View inflater1 = getLayoutInflater().inflate(R.layout.wave_view_layout , null) ;
         waveView = (WaveView)inflater1.findViewById(R.id.waveViewId) ;
         waveView.startAnimation();
+        waveView.startImageRotate();
         return inflater1 ;
     }
 }
