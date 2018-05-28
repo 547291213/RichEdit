@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.xkfeng.richedit.JavaBean.EditData;
+import com.example.xkfeng.richedit.JavaBean.EditSql;
 import com.example.xkfeng.richedit.R;
 
 import org.w3c.dom.Text;
@@ -22,12 +22,12 @@ import java.util.List;
  */
 
 public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHolder> implements View.OnClickListener{
-    private  List<EditData> editDataList;
+    private  List<EditSql> editDataList;
 
     private Context context ;
-    public  RecyclerAdapter(List<EditData> editData)
+    public  RecyclerAdapter(List<EditSql> editSql)
     {
-        editDataList = editData ;
+        editDataList = editSql ;
         System.out.println("ZHIXINg ");
     }
 
@@ -60,10 +60,18 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
-        EditData editData = editDataList.get(position) ;
-        holder.listItemTime.setText(editData.getTime());
-        holder.listItemImage.setText(editData.getIsCollected());
-        holder.listItemTitle.setText(editData.getData());
+        EditSql editSql = editDataList.get(position) ;
+        boolean isCollect = editSql.getIsCollected() ;
+        String collect ;
+        if (isCollect)
+        {
+            collect="已收藏" ;
+        }else {
+            collect="收藏" ;
+        }
+        holder.listItemTime.setText(editSql.getCreate_time());
+        holder.listItemImage.setText(collect);
+        holder.listItemTitle.setText(editSql.getTitle());
     }
 
     @Override

@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.example.xkfeng.richedit.JavaBean.EditData;
+import com.example.xkfeng.richedit.JavaBean.EditSql;
 import com.example.xkfeng.richedit.R;
 import com.example.xkfeng.richedit.RecyclerViewPackage.RecyclerAdapter;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ import java.util.Map;
 
 public class CollectionFragment extends Fragment {
     private RecyclerView listView ;
-    private List<EditData> editData ;
+    private List<EditSql> editSql ;
     private AdapterData adapterData ;
     @Nullable
     @Override
@@ -41,17 +43,11 @@ public class CollectionFragment extends Fragment {
     private void init()
     {
 
-        editData = new ArrayList<>() ;
-        for (int i = 0 ; i< 20 ; i++)
-        {
-            EditData edit = new EditData() ;
-            edit.setData("Recyclerview");
-            edit.setIsCollected("收藏");
-            edit.setTime("2018-05-20 17:45:65");
-            editData.add(edit) ;
-        }
+        editSql = new ArrayList<>() ;
+        editSql = DataSupport.where("isCollected = ?" , "true")
+                .find(EditSql.class) ;
 
-        adapterData = new AdapterData(editData) ;
+        adapterData = new AdapterData(editSql) ;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) ;
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listView.setLayoutManager(linearLayoutManager);
@@ -60,8 +56,8 @@ public class CollectionFragment extends Fragment {
         //listView.setAdapter(adapter);
     }
     public class AdapterData extends RecyclerAdapter {
-        public AdapterData(List<EditData> editData) {
-            super(editData);
+        public AdapterData(List<EditSql> editSql) {
+            super(editSql);
         }
     }
 }
