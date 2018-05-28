@@ -73,6 +73,38 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/viewPageLineaerLayout"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/mainViewPage1"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/blue_200"
+                android:visibility="visible"
+                />
+            <View
+                android:id="@+id/mainViewPage2"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/blue_200"
+                android:visibility="invisible"
+                />
+            <View
+                android:id="@+id/mainViewPage3"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="@color/blue_200"
+                android:visibility="invisible"
+
+                />
+
+        </LinearLayout>
     </RelativeLayout>
     <fragment
         android:id="@+id/id_right_menu"

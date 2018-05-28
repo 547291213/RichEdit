@@ -1,7 +1,9 @@
 package com.example.xkfeng.richedit;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -29,6 +31,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView roundImage;
     private  File outputImage ;
 
+    private UpdateDataBroadcast broadcast ;
+
+    public static int CURRENT_PAGE = 1 ;
+    private LinearLayout viewPageLineaerLayout ;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -92,6 +100,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else {
             // Toast.makeText(MainActivity.this , "已经拥有权限" , Toast.LENGTH_SHORT).show();
         }
+
+        broadcast = new UpdateDataBroadcast() ;
+        IntentFilter intentFilter = new IntentFilter() ;
+        intentFilter.addAction("com.example.xkfeng.richedit.mainbroadcast");
+        registerReceiver(broadcast , intentFilter) ;
+
 
         init();
     }
@@ -114,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         collectionText.setOnClickListener(this);
         tipText = (TextView) findViewById(R.id.tipText);
         tipText.setOnClickListener(this);
+
+        viewPageLineaerLayout = (LinearLayout)findViewById(R.id.viewPageLineaerLayout) ;
 
         sqlClass = new SqlClass(this ,SqlClass.TABLE_NAME ) ;
         db = sqlClass.getWritableDatabase() ;
@@ -180,6 +196,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void onViewPageChange(int index)
+    {
+        int count = viewPageLineaerLayout.getChildCount() ;
+        for (int i = 0 ; i <count ; i++)
+        {
+            viewPageLineaerLayout.getChildAt(i).setVisibility(View.INVISIBLE);
+        }
+        viewPageLineaerLayout.getChildAt(index).setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -202,18 +228,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout_content , homeFragment) ;
             fragmentTransaction.commit();
+            CURRENT_PAGE = 1 ;
+            onViewPageChange(0) ;
         }
         else if (v.getId() == R.id.collectionText)
         {
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout_content , collectionFragment) ;
             fragmentTransaction.commit();
+            CURRENT_PAGE = 2 ;
+            onViewPageChange(1) ;
         }
         else if (v.getId() == R.id.tipText)
         {
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout_content , tipFragment) ;
             fragmentTransaction.commit();
+            CURRENT_PAGE = 3 ;
+            onViewPageChange(2) ;
         }
     }
 
@@ -260,5 +292,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return imageUri ;
+    }
+
+    public class UpdateDataBroadcast extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //更新数据
+            if ("homeFragment".equals(intent.getStringExtra("action")))
+            {
+                  homeFragment.init();
+            }
+            if ("collectionFragment".equals(intent.getStringExtra("action1")))
+            {
+                  collectionFragment.init();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcast);
     }
 }

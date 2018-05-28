@@ -67,4 +67,8 @@ public class EditSql extends DataSupport {
     }
 
 
+    @Override
+    public String toString() {
+        return getTitle() + getContent() + getCreate_time() + getIsCollected() +" \n" ;
+    }
 }

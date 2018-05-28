@@ -121,6 +121,13 @@ public class EditActivity extends AppCompatActivity{
                 editSql.setTitle(title);
                 editSql.setUser_id(1);
                 editSql.save();
+
+                Intent intent = new Intent() ;
+                intent.putExtra("action" ,"homeFragment") ;
+                intent.setAction("com.example.xkfeng.richedit.mainbroadcast") ;
+                sendBroadcast(intent);
+                //退出当前Activity
+                finish();
             }
 
             else if (v.getId() == R.id.backText)
@@ -151,6 +158,23 @@ public class EditActivity extends AppCompatActivity{
         Date date = new Date() ;
         String str = sdf.format(date) ;
         return str ;
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(EditActivity.this)
+                .setIcon(R.drawable.app_pic)
+                .setTitle("退出")
+                .setMessage("退出将不会保存您编辑的数据")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("取消",null)
+                .create()
+                .show();
     }
 
     private void setupBold() {

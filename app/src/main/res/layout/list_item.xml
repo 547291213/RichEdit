@@ -41,7 +41,7 @@
             android:id="@+id/listItemTitle"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:layout_alignParentBottom="true"

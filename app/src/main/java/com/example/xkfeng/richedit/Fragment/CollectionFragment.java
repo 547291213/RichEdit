@@ -40,11 +40,11 @@ public class CollectionFragment extends Fragment {
         //return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    private void init()
+    public void init()
     {
 
         editSql = new ArrayList<>() ;
-        editSql = DataSupport.where("isCollected = ?" , "true")
+        editSql = DataSupport.where("isCollected = ?" , "1")
                 .find(EditSql.class) ;
 
         adapterData = new AdapterData(editSql) ;
