@@ -41,6 +41,7 @@ public class EditActivity extends AppCompatActivity{
     private static final int USER_ID_DATA = 1 ;
     private static final String TAG = "EditActivity" ;
     private TextView editingText , backText , finishText ;
+    private static int id = 1 ;
 //    private EditText editTitle ;
 
 //    private static final String BOLD = "<b>Bold</b><br><br>";
@@ -114,7 +115,7 @@ public class EditActivity extends AppCompatActivity{
                 Log.i(TAG , "THE TITLE IS "+ title) ;
                 EditSql editSql = new EditSql();
                 editSql.setCollected(false);
-
+                editSql.setId(id);
                 editSql.setContent(knife.getText().toString());
                 editSql.setCreate_time(getTime());
                 editSql.setUpdate_time(getTime());
@@ -122,6 +123,8 @@ public class EditActivity extends AppCompatActivity{
                 editSql.setUser_id(1);
                 editSql.save();
 
+                //id增加
+                id++ ;
                 Intent intent = new Intent() ;
                 intent.putExtra("action" ,"homeFragment") ;
                 intent.setAction("com.example.xkfeng.richedit.mainbroadcast") ;

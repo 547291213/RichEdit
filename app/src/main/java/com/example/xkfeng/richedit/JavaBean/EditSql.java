@@ -1,5 +1,6 @@
 package com.example.xkfeng.richedit.JavaBean;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 /**
@@ -7,6 +8,9 @@ import org.litepal.crud.DataSupport;
  */
 
 public class EditSql extends DataSupport {
+
+
+    private int id ;
 
     private String title ;
 
@@ -46,6 +50,10 @@ public class EditSql extends DataSupport {
         isCollected = collected;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
@@ -66,6 +74,10 @@ public class EditSql extends DataSupport {
         this.user_id = user_id;
     }
 
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {

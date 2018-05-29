@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                   homeFragment.init();
             }
-            if ("collectionFragment".equals(intent.getStringExtra("action1")))
+            else if ("collectionFragment".equals(intent.getStringExtra("action")))
             {
                   collectionFragment.init();
             }

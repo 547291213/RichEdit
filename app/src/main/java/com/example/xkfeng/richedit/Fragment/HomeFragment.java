@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView listView ;
     private List<EditSql> editSql ;
     private AdapterData adapterData ;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
