@@ -272,6 +272,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setFragment.onActivityResult(requestCode , resultCode ,data);
 
 
+        /*
+        关闭后重新打开。科比避免主界面和Drawer重合的BUG
+         */
+        mDrawerLayout.closeDrawers();
         mDrawerLayout.openDrawer(Gravity.LEFT);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
                 Gravity.LEFT);
