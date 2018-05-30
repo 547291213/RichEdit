@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,24 +15,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,13 +37,10 @@ import com.example.xkfeng.richedit.Fragment.CollectionFragment;
 import com.example.xkfeng.richedit.Fragment.HomeFragment;
 import com.example.xkfeng.richedit.Fragment.SetFragemnt;
 import com.example.xkfeng.richedit.Fragment.TipFragment;
-import com.example.xkfeng.richedit.SqlHelper.SqlClass;
 import com.example.xkfeng.richedit.StaticElement.StateElement;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FragmentTransaction fragmentTransaction;
     private DrawerLayout mDrawerLayout;
 
-    private SQLiteDatabase db ;
-    private SqlClass sqlClass ;
     private static final String TAG = "MainActivity"  ;
     private RelativeLayout drawer_relayout ;
     private SetFragemnt setFragment ;
@@ -103,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
+        /*
+        Careme权限申请
+         */
         int check1 = checkSelfPermission(android.Manifest.permission.CAMERA) ;
         if (check1!=PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{"android.Manifest.permission.CAMERA"} ,REQUEST_CODE_CAMERA );
@@ -120,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerReceiver(broadcast , intentFilter) ;
 
 
+        /*
+         FloatActionButton
+         1 设置点击事件
+         2 根据当前的排序方式，来动态调整Action中提示信息，以及调用方法
+         */
         floatButton = (FloatingActionButton)findViewById(R.id.floatButton) ;
         floatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +148,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        /*
+        SearchView
+        1 注册监听器：当内容改变就做出响应
+        2 响应内容：根据输入文本，动态调用homeFragment的初始化方法init(String),init()
+         */
         searchView = (SearchView)findViewById(R.id.searchview) ;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -184,6 +184,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        /*
+        布局初始化
+         */
         init();
     }
 
@@ -200,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
     private void init() {
 
+
         manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE) ;
         display = manager.getDefaultDisplay() ;
         setText = (TextView) findViewById(R.id.setText);
@@ -215,8 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         viewPageLineaerLayout = (LinearLayout)findViewById(R.id.viewPageLineaerLayout) ;
 
-        sqlClass = new SqlClass(this ,SqlClass.TABLE_NAME ) ;
-        db = sqlClass.getWritableDatabase() ;
+
 
         frameLayout = (FrameLayout) findViewById(R.id.layout_content);
 
@@ -253,6 +256,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+        /*
+         DrawerLayout
+         1 注册监听器：响应抽屉拖动
+         2 监听器功能：根据当前拖动的位置，动态调整主页面的显示布局 ，模拟手机版QQ 效果
+
+         */
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         drawer_relayout = (RelativeLayout)findViewById(R.id.drawer_relayout) ;
@@ -280,6 +289,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    /*
+    主页面切换：首页，收藏，关于我们。底部下划线的动态移动。给用户点击切换页面的效果
+    只将当前页面对应的下划线显示，其它下划线隐藏。
+     */
     private void onViewPageChange(int index)
     {
         int count = viewPageLineaerLayout.getChildCount() ;
@@ -360,8 +373,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         setFragment.onActivityResult(requestCode , resultCode ,data);
-
-
         /*
         关闭后重新打开。科比避免主界面和Drawer重合的BUG
          */
@@ -388,6 +399,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return imageUri ;
     }
 
+    /*
+      BroadcastReceiver广播
+      功能：用于页面的更新
+      作用地方：当用户点击收藏或者取消收藏，置顶或者取消置顶，时候调用
+     */
     public class UpdateDataBroadcast extends BroadcastReceiver
     {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -409,6 +425,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(broadcast);
+        //注销广播
+        if (broadcast!=null)
+        {
+            unregisterReceiver(broadcast);
+            broadcast=null;
+        }
+
     }
 }

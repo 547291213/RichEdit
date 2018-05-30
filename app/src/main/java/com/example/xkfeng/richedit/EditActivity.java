@@ -1,20 +1,14 @@
 package com.example.xkfeng.richedit;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,9 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xkfeng.richedit.JavaBean.EditSql;
-import com.example.xkfeng.richedit.SqlHelper.SqlClass;
-
-import org.litepal.LitePal;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,8 +27,7 @@ import io.github.mthli.knife.KnifeText;
  */
 
 public class EditActivity extends AppCompatActivity{
-    private SQLiteDatabase db ;
-    private SqlClass sqlClass ;
+
     private static final int USER_ID_DATA = 1 ;
     private static final String TAG = "EditActivity" ;
     private TextView editingText , backText , finishText ;
@@ -69,8 +59,6 @@ public class EditActivity extends AppCompatActivity{
             actionBar.hide();
         }
 
-        sqlClass = new SqlClass(this , SqlClass.TABLE_NAME+".db") ;
-        db = sqlClass.getWritableDatabase() ;
 
         editingText = (TextView)findViewById(R.id.editingText) ;
         backText = (TextView)findViewById(R.id.backText) ;
@@ -159,15 +147,7 @@ public class EditActivity extends AppCompatActivity{
             }
             else if (v.getId() == R.id.editingText)
             {
-                Cursor cursor = db.query(SqlClass.TABLE_NAME ,null , null ,null,
-                        null,null ,null);
-                while (cursor.moveToNext())
-                {
-                    Log.i(TAG ,"THE ID IS " + cursor.getInt(0) +
-                     cursor.getString(1) + cursor.getString(2) +
-                            cursor.getString(3)) ;
-                }
-                cursor.close();
+
             }
             Toast.makeText(EditActivity.this , "OnClick" , Toast.LENGTH_SHORT).show();
         }
