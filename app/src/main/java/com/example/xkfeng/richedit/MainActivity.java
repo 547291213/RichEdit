@@ -1,5 +1,6 @@
 package com.example.xkfeng.richedit;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -105,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Toast.makeText(MainActivity.this , "已经拥有权限" , Toast.LENGTH_SHORT).show();
         }
 
+        /*
+        注册广播
+         */
         broadcast = new UpdateDataBroadcast() ;
         IntentFilter intentFilter = new IntentFilter() ;
         intentFilter.addAction("com.example.xkfeng.richedit.mainbroadcast");
@@ -122,8 +126,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                Toast.makeText(MainActivity.this , newText , Toast.LENGTH_SHORT).show();
-                RecyclerView recyclerView = homeFragment.getRecyclerView();
+                /*
+                为空的时候调用默认的初始化方法
+                 */
+                if (newText.equals(""))
+                {
+                    homeFragment.init();
+                }
+
+                /*
+                不为空的时候调用默认的查询列表显示方法
+                 */
+                else {
+                    homeFragment.init(newText);
+
+                }
 
                 return true;
             }
@@ -332,6 +349,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public class UpdateDataBroadcast extends BroadcastReceiver
     {
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onReceive(Context context, Intent intent) {
             //更新数据

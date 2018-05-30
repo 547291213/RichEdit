@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.RippleDrawable;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -68,6 +69,7 @@ public class HomeFragment extends Fragment {
     public void init()
     {
 
+        Log.i("HOMEGRAGMENGT" , "INIT") ;
         editSql = new ArrayList<>() ;
         editSql = DataSupport.where("istop = ?" , "1" )
                 .order("update_time desc")
@@ -87,10 +89,45 @@ public class HomeFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         //添加Android自带的分割线
+        //new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL)
         //添加自定义分割线
         DividerItemDecoration divider = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider));
+        recyclerview.addItemDecoration(divider);
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+        recyclerview.setHasFixedSize(true);
+        recyclerview.setAdapter(adapterData);
+    }
+
+    public void init(String newText)
+    {
+        Log.i("HOMEGRAGMENGT" , "INIT(STRING)") ;
+        List<EditSql> editSqlList = new ArrayList<>() ;
+        editSqlList = DataSupport.where("content like ?" ,"%"+ newText +"%")
+                .find(EditSql.class) ;
+        List<EditSql> editSqlList1 = new ArrayList<>() ;
+        editSqlList1 = DataSupport.where("create_time like ? and content not like ?" ,
+                "%"+ newText +"%","%"+ newText +"%").find(EditSql.class) ;
+//        List<EditSql> editSqlList2 = new ArrayList<>() ;
+//        editSqlList2 = DataSupport.where("create_time not like ? and content not like ? and update_time like ?" ,
+//                "%"+ newText +"%","%"+ newText +"%" ,"%"+ newText +"%").find(EditSql.class) ;
+//
+//
+
+        for (EditSql ee : editSqlList1)
+        {
+            editSqlList.add(ee) ;
+        }
+        adapterData = new AdapterData(editSqlList) ;
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) ;
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerview.setLayoutManager(linearLayoutManager);
+        //添加Android自带的分割线
         //new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL)
+        //添加自定义分割线
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider));
         recyclerview.addItemDecoration(divider);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setHasFixedSize(true);
@@ -103,11 +140,10 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*
-        从数据库获取数据
-         */
-
     }
+    /*
+    RecyclerAdapter
+     */
     public class AdapterData extends RecyclerAdapter {
         public AdapterData(List<EditSql> editSql) {
             super(editSql);

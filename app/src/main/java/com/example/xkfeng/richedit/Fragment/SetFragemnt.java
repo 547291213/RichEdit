@@ -47,7 +47,8 @@ import java.util.Map;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by initializing on 2018/5/23.
+ * 设置界面
+ *
  */
 
 public class SetFragemnt extends Fragment {
@@ -73,6 +74,9 @@ public class SetFragemnt extends Fragment {
         View view = inflater.inflate(R.layout.set_layout , container , false) ;
 
 
+        /*
+        ListView列表项
+         */
         mapList = new ArrayList<Map<String, Object>>() ;
         for (int i = 0 ; i< 2 ; i++)
         {
@@ -85,6 +89,12 @@ public class SetFragemnt extends Fragment {
         simpleAdapter = new SimpleAdapter(getContext(),mapList , R.layout.header_image_list_item ,
                 new String[]{"Image" , "Text"} ,
                 new int[]{R.id.headerItemImage ,R.id.headerItemText});
+
+        /*
+           用AlertDialog来设置图片
+           1 相机，拍照
+           2 相册，选取
+         */
         roundImage = (RoundImage) view.findViewById(R.id.round_image) ;
         roundImage.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -131,7 +141,6 @@ public class SetFragemnt extends Fragment {
 
         imageView = (MyImageView) view.findViewById(R.id.backImageView) ;
         animation = AnimationUtils.loadAnimation(getContext(),R.anim.image_anima) ;
-
         animation.setInterpolator(new LinearInterpolator());
         animation.setFillAfter(true);
         imageView.startAnimation(animation);
@@ -171,6 +180,9 @@ public class SetFragemnt extends Fragment {
 
     }
 
+    /*
+    权限获取
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -181,6 +193,9 @@ public class SetFragemnt extends Fragment {
         }
     }
 
+    /*
+    选取照片后返回
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode , resultCode , data);
@@ -220,6 +235,9 @@ public class SetFragemnt extends Fragment {
 
         }
     }
+    /*
+    获取图片Uri地址
+     */
     public Uri getImageUri()
     {
         Uri imageUri ;
@@ -259,6 +277,9 @@ public class SetFragemnt extends Fragment {
 
     }
 
+    /*
+    解析从相册获取的图片
+     */
     @TargetApi(19)
     private void handleImageOnKitKat(Intent data)
     {
