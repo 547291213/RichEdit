@@ -88,6 +88,14 @@ public class EditActivity extends AppCompatActivity{
        // knife.fromHtml(EXAMPLE);
         knife.setSelection(knife.getEditableText().length());
 
+        /*
+        如果是修改数据，则需要显示当前列表项的数据
+         */
+        if (getIntent().getStringExtra("data") != null)
+        {
+            knife.setText(getIntent().getStringExtra("data")) ;
+
+        }
         setupBold();
         setupItalic();
         setupUnderline();
@@ -107,28 +115,38 @@ public class EditActivity extends AppCompatActivity{
               /*
               获取输入的内容载入数据库
                */
+                //如果是直接添加内容
+                if (MainActivity.EDIT_STATE == 1)
+                {   String data = knife.getText().toString() ;
+                    Log.i(TAG , "THE DTAT IS "+ data) ;
+                    String title = data.split("\n")[0] ;
 
-                String data = knife.getText().toString() ;
-                Log.i(TAG , "THE DTAT IS "+ data) ;
-                String title = data.split("\n")[0] ;
+                    Log.i(TAG , "THE TITLE IS "+ title) ;
+                    EditSql editSql = new EditSql();
+                    editSql.setCollected(false);
+                    editSql.setId(id);
+                    editSql.setContent(knife.getText().toString());
+                    editSql.setCreate_time(getTime());
+                    editSql.setUpdate_time(getTime());
+                    editSql.setTitle(title);
+                    editSql.setUser_id(1);
+                    editSql.save();
 
-                Log.i(TAG , "THE TITLE IS "+ title) ;
-                EditSql editSql = new EditSql();
-                editSql.setCollected(false);
-                editSql.setId(id);
-                editSql.setContent(knife.getText().toString());
-                editSql.setCreate_time(getTime());
-                editSql.setUpdate_time(getTime());
-                editSql.setTitle(title);
-                editSql.setUser_id(1);
-                editSql.save();
+                    //id增加
+                    id++ ;
+                    Intent intent = new Intent() ;
+                    intent.putExtra("action" ,"homeFragment") ;
+                    intent.setAction("com.example.xkfeng.richedit.mainbroadcast") ;
+                    sendBroadcast(intent);
 
-                //id增加
-                id++ ;
-                Intent intent = new Intent() ;
-                intent.putExtra("action" ,"homeFragment") ;
-                intent.setAction("com.example.xkfeng.richedit.mainbroadcast") ;
-                sendBroadcast(intent);
+                }
+                //如果是对现有内容进行修改
+                else if (MainActivity.EDIT_STATE == 2)
+                {
+
+
+                }
+
                 //退出当前Activity
                 finish();
             }
@@ -155,7 +173,7 @@ public class EditActivity extends AppCompatActivity{
         }
     }
 
-    private String getTime()
+    public static String getTime()
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss") ;
         Date date = new Date() ;

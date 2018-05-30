@@ -77,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private UpdateDataBroadcast broadcast ;
 
-    public static int CURRENT_PAGE = 1 ;
+    public static int CURRENT_PAGE = 1 ; //首页 收藏 关于我们三个页面的判断
+    public static int EDIT_STATE = 1 ;  //1表示添加进入Edit界面，2表示点击列表项进入Edit界面
     private LinearLayout viewPageLineaerLayout ;
 
 
@@ -110,10 +111,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //每次都初始为1
+        EDIT_STATE = 1 ;
+
+    }
 
     /*
-    初始化代码
-     */
+        初始化代码
+         */
     private void init() {
 
         manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE) ;

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.example.xkfeng.richedit.EditActivity;
 import com.example.xkfeng.richedit.JavaBean.EditSql;
 import com.example.xkfeng.richedit.R;
 import com.example.xkfeng.richedit.RecyclerViewPackage.RecyclerAdapter;
@@ -35,7 +37,7 @@ import java.util.Map;
  */
 
 public class HomeFragment extends Fragment {
-    private RecyclerView listView ;
+    private RecyclerView recyclerview ;
     private List<EditSql> editSql ;
     private AdapterData adapterData ;
 
@@ -43,25 +45,43 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.home_fragment , null) ;
-        listView = (RecyclerView)view.findViewById(R.id.homeListView) ;
+        recyclerview = (RecyclerView)view.findViewById(R.id.homeListView) ;
         init() ;
 
         return  view;
         //return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    /*
+    初始化列表项。因为存在多次调用，所以单独列出为方法
+    1 首先将所有置顶的列表项找出，按照修改时间倒序排列
+    2 找出非置顶的列表项，按照创建时间顺序排列，并且添加到1中得到的序列中
+    3 用列表项对象去初始化Adapater，用recyclerview指定垂直布局，并且指定adapter
+     */
     public void init()
     {
-        editSql = new ArrayList<>() ;
-        editSql = DataSupport.findAll(EditSql.class);
 
+        editSql = new ArrayList<>() ;
+        editSql = DataSupport.where("istop = ?" , "1" )
+                .order("update_time desc")
+                .find(EditSql.class) ;
+        List<EditSql> editSqlList = new ArrayList<>() ;
+        editSqlList = DataSupport.where("istop = ?" , "0")
+                .order("create_time")
+                .find(EditSql.class);
+
+        for (EditSql ee : editSqlList)
+        {
+            editSql.add(ee) ;
+        }
         adapterData = new AdapterData(editSql) ;
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) ;
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        listView.setLayoutManager(linearLayoutManager);
-
-        listView.setAdapter(adapterData);
+        recyclerview.setLayoutManager(linearLayoutManager);
+        //添加Android自带的分割线
+        recyclerview.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        recyclerview.setAdapter(adapterData);
     }
 
 

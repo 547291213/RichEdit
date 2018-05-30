@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:background="@color/white"
     android:alpha="255"
+    android:keepScreenOn="true"
     android:layout_height="match_parent">
 
     <!--<ImageView-->
@@ -45,6 +46,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/line_1"
         android:layout_below="@id/line_view"
+        android:keepScreenOn="true"
+        android:touchscreenBlocksFocus="true"
         >
         <ImageView
             style="@style/ImageData"
@@ -61,6 +64,7 @@
             android:gravity="right"
             android:layout_weight="1"
             />
+
 
     </LinearLayout>
     <LinearLayout
@@ -84,6 +88,7 @@
             android:gravity="right"
             android:layout_weight="1"
             />
+
     </LinearLayout>
     <LinearLayout
         android:id="@+id/line_3"
@@ -153,12 +158,13 @@
             android:gravity="right"
             android:layout_weight="1"
             />
+
     </LinearLayout>
-    <Button
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="设置"
-        android:background="@color/waveColor1"
-        />
+    <!--<Button-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:text="设置"-->
+        <!--android:background="@color/waveColor1"-->
+        <!--/>-->
 </RelativeLayout>

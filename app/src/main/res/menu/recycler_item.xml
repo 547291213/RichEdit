@@ -9,7 +9,13 @@
         app:showAsAction="never"
 
         >
-
+    </item>
+    <item
+        android:id="@+id/topItem"
+        android:title="@string/menu_top"
+        android:icon="@drawable/icon_top"
+        app:showAsAction="never"
+        >
 
     </item>
 </menu>

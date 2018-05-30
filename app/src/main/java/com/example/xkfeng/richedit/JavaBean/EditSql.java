@@ -22,6 +22,10 @@ public class EditSql extends DataSupport {
 
     private int user_id ;
 
+    @Column(defaultValue = "false")
+    private boolean isTop ;
+
+    @Column(defaultValue = "false")
     private boolean isCollected ;
 
     public int getUser_id() {
@@ -46,12 +50,20 @@ public class EditSql extends DataSupport {
 
     public Boolean getIsCollected(){return isCollected ; }
 
-    public void setCollected(boolean collected) {
-        isCollected = collected;
-    }
 
     public int getId() {
         return id;
+    }
+
+    public Boolean getIsTop(){return isTop ;} ;
+
+
+    public void setTop(boolean top) {
+        isTop = top;
+    }
+
+    public void setCollected(boolean collected) {
+        isCollected = collected;
     }
 
     public void setContent(String content) {
