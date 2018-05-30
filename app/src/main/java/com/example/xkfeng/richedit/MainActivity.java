@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -44,6 +46,7 @@ import com.example.xkfeng.richedit.Fragment.HomeFragment;
 import com.example.xkfeng.richedit.Fragment.SetFragemnt;
 import com.example.xkfeng.richedit.Fragment.TipFragment;
 import com.example.xkfeng.richedit.SqlHelper.SqlClass;
+import com.example.xkfeng.richedit.StaticElement.StateElement;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private SearchView   searchView ;
 
+    private FloatingActionButton floatButton ;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +119,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentFilter.addAction("com.example.xkfeng.richedit.mainbroadcast");
         registerReceiver(broadcast , intentFilter) ;
 
+
+        floatButton = (FloatingActionButton)findViewById(R.id.floatButton) ;
+        floatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Snackbar snackbar = Snackbar.make(v,getResources().getString(R.string.sort_way) ,Snackbar.LENGTH_LONG);
+
+                if(StateElement.SORT_STATE == 1)
+                {
+                    snackbar.setAction(getResources().getString(R.string.sort_create_time) ,new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(MainActivity.this , "按创建时间排序", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    StateElement.SORT_STATE = 2 ;
+
+                }else if (StateElement.SORT_STATE == 2)
+                {
+                    snackbar .setAction(getResources().getString(R.string.sort_letter), new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+
+                            Toast.makeText(MainActivity.this , "按标题字母排序", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    StateElement.SORT_STATE = 1 ;
+
+                }
+                snackbar .show();
+            }
+        });
 
         searchView = (SearchView)findViewById(R.id.searchview) ;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -277,6 +315,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             CURRENT_PAGE = 1 ;
             onViewPageChange(0) ;
             searchView.setVisibility(View.VISIBLE);
+            floatButton.setVisibility(View.VISIBLE);
         }
         else if (v.getId() == R.id.collectionText)
         {
@@ -286,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             CURRENT_PAGE = 2 ;
             onViewPageChange(1) ;
             searchView.setVisibility(View.GONE);
+            floatButton.setVisibility(View.VISIBLE);
         }
         else if (v.getId() == R.id.tipText)
         {
@@ -295,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             CURRENT_PAGE = 3 ;
             onViewPageChange(2) ;
             searchView.setVisibility(View.GONE);
+            floatButton.setVisibility(View.GONE);
         }
     }
 

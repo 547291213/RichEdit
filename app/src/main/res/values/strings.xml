@@ -27,4 +27,9 @@
     <string name="menu_delete">删除</string>
     <string name="menu_top">置顶</string>
     <string name="menu_nottop">取消置顶</string>
+    
+    <string name="sort_way">排序方式</string>
+    <string name="sort_create_time">创建先后顺序</string>
+    <string name="sort_update_time">修改先后顺序</string>
+    <string name="sort_letter">标题字母顺序</string>
 </resources>
