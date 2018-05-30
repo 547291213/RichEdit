@@ -20,6 +20,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Display;
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int EDIT_STATE = 1 ;  //1表示添加进入Edit界面，2表示点击列表项进入Edit界面
     private LinearLayout viewPageLineaerLayout ;
 
+    private SearchView   searchView ;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -107,6 +110,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentFilter.addAction("com.example.xkfeng.richedit.mainbroadcast");
         registerReceiver(broadcast , intentFilter) ;
 
+
+        searchView = (SearchView)findViewById(R.id.searchview) ;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            //搜索框内部改变回调，newText就是搜索框里的内容
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                Toast.makeText(MainActivity.this , newText , Toast.LENGTH_SHORT).show();
+                RecyclerView recyclerView = homeFragment.getRecyclerView();
+
+                return true;
+            }
+        });
 
         init();
     }
@@ -238,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragmentTransaction.commit();
             CURRENT_PAGE = 1 ;
             onViewPageChange(0) ;
+            searchView.setVisibility(View.VISIBLE);
         }
         else if (v.getId() == R.id.collectionText)
         {
@@ -246,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragmentTransaction.commit();
             CURRENT_PAGE = 2 ;
             onViewPageChange(1) ;
+            searchView.setVisibility(View.GONE);
         }
         else if (v.getId() == R.id.tipText)
         {
@@ -254,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragmentTransaction.commit();
             CURRENT_PAGE = 3 ;
             onViewPageChange(2) ;
+            searchView.setVisibility(View.GONE);
         }
     }
 

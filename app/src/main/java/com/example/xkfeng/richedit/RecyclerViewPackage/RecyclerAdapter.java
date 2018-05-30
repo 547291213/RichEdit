@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import org.litepal.crud.DataSupport;
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -266,6 +268,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         //  Log.i("RecyclerAdapter" , "SIZE IS " + editDataList.size())  ;
         return editDataList.size();
     }
+
 
 
 

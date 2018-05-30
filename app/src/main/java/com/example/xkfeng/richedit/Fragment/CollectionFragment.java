@@ -3,6 +3,7 @@ package com.example.xkfeng.richedit.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,10 +70,14 @@ public class CollectionFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         //添加Android自带的分割线
-        recyclerview.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        //添加自定义分割线
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider));
+        //new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL)
+        recyclerview.addItemDecoration(divider);
 
         recyclerview.setAdapter(adapterData);
-        //recyclerview.setAdapter(adapter);
+
     }
     public class AdapterData extends RecyclerAdapter {
         public AdapterData(List<EditSql> editSql) {

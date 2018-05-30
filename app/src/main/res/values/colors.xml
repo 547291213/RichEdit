@@ -11,4 +11,8 @@
     <color name="blue_500">#FF2196F3</color>
     <color name="blue_700">#FF1976D2</color>
     <color name="gray">#484845</color>
+    <color name="title_color">#ed4255</color>
+
+    <color name="testColor">#ffffff</color>
+
 </resources>

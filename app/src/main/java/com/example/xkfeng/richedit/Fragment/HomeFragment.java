@@ -1,14 +1,19 @@
 package com.example.xkfeng.richedit.Fragment;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +46,7 @@ public class HomeFragment extends Fragment {
     private List<EditSql> editSql ;
     private AdapterData adapterData ;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,6 +64,7 @@ public class HomeFragment extends Fragment {
     2 找出非置顶的列表项，按照创建时间顺序排列，并且添加到1中得到的序列中
     3 用列表项对象去初始化Adapater，用recyclerview指定垂直布局，并且指定adapter
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void init()
     {
 
@@ -80,9 +87,16 @@ public class HomeFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         //添加Android自带的分割线
-        recyclerview.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        //添加自定义分割线
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider));
+        //new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL)
+        recyclerview.addItemDecoration(divider);
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+        recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(adapterData);
     }
+
 
 
     @Override
@@ -98,5 +112,10 @@ public class HomeFragment extends Fragment {
         public AdapterData(List<EditSql> editSql) {
             super(editSql);
         }
+    }
+
+    public RecyclerView getRecyclerView()
+    {
+        return recyclerview ;
     }
 }
