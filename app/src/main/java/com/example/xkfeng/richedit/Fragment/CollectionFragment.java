@@ -16,6 +16,7 @@ import android.widget.SimpleAdapter;
 import com.example.xkfeng.richedit.JavaBean.EditSql;
 import com.example.xkfeng.richedit.R;
 import com.example.xkfeng.richedit.RecyclerViewPackage.RecyclerAdapter;
+import com.example.xkfeng.richedit.StaticElement.StateElement;
 
 import org.litepal.crud.DataSupport;
 
@@ -50,20 +51,45 @@ public class CollectionFragment extends Fragment {
      */
     public void init()
     {
-
-        editSql = new ArrayList<>() ;
-        editSql = DataSupport.where("istop = ? and isCollected = ? " , "1"  ,"1")
-                .order("update_time desc")
-                .find(EditSql.class) ;
-        List<EditSql> editSqlList = new ArrayList<>() ;
-        editSqlList = DataSupport.where("istop = ? and isCollected = ? " , "0" , "1")
-                .order("create_time")
-                .find(EditSql.class);
-
-        for (EditSql ee : editSqlList)
+        //默认排序：
+        // 1 置顶列表项（按修改时间倒序排序）
+        // 2 普通列表项（按创建时间顺序排序）
+        if(StateElement.SORT_STATE == 1)
         {
-            editSql.add(ee) ;
+            editSql = new ArrayList<>() ;
+            editSql = DataSupport.where("istop = ? and isCollected = ? " , "1"  ,"1")
+                    .order("update_time desc")
+                    .find(EditSql.class) ;
+            List<EditSql> editSqlList = new ArrayList<>() ;
+            editSqlList = DataSupport.where("istop = ? and isCollected = ? " , "0" , "1")
+                    .order("create_time")
+                    .find(EditSql.class);
+
+            for (EditSql ee : editSqlList)
+            {
+                editSql.add(ee) ;
+            }
         }
+        //按照内容字母顺序
+        // 1 置顶列表项（按照内容字母顺序）
+        // 2 普通列表项（按照内容字母顺序）
+        else if (StateElement.SORT_STATE == 2)
+        {
+            editSql = new ArrayList<>() ;
+            editSql = DataSupport.where("istop = ? and isCollected = ? " , "1"  ,"1")
+                    .order("title")
+                    .find(EditSql.class) ;
+            List<EditSql> editSqlList = new ArrayList<>() ;
+            editSqlList = DataSupport.where("istop = ? and isCollected = ? " , "0" , "1")
+                    .order("title")
+                    .find(EditSql.class);
+
+            for (EditSql ee : editSqlList)
+            {
+                editSql.add(ee) ;
+            }
+        }
+
 
         adapterData = new AdapterData(editSql) ;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) ;

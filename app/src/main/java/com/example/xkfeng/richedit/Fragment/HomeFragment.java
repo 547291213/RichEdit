@@ -29,6 +29,7 @@ import com.example.xkfeng.richedit.EditActivity;
 import com.example.xkfeng.richedit.JavaBean.EditSql;
 import com.example.xkfeng.richedit.R;
 import com.example.xkfeng.richedit.RecyclerViewPackage.RecyclerAdapter;
+import com.example.xkfeng.richedit.StaticElement.StateElement;
 
 import org.litepal.crud.DataSupport;
 
@@ -61,27 +62,52 @@ public class HomeFragment extends Fragment {
 
     /*
     初始化列表项。因为存在多次调用，所以单独列出为方法
-    1 首先将所有置顶的列表项找出，按照修改时间倒序排列
+    1 首先将所有置顶的列表项找出，(由排序方式，动态调节)
     2 找出非置顶的列表项，按照创建时间顺序排列，并且添加到1中得到的序列中
     3 用列表项对象去初始化Adapater，用recyclerview指定垂直布局，并且指定adapter
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void init()
     {
-
-        Log.i("HOMEGRAGMENGT" , "INIT") ;
-        editSql = new ArrayList<>() ;
-        editSql = DataSupport.where("istop = ?" , "1" )
-                .order("update_time desc")
-                .find(EditSql.class) ;
-        List<EditSql> editSqlList = new ArrayList<>() ;
-        editSqlList = DataSupport.where("istop = ?" , "0")
-                .order("create_time")
-                .find(EditSql.class);
-
-        for (EditSql ee : editSqlList)
+        //默认排序：
+        // 1 置顶列表项（按修改时间倒序排序）
+        // 2 普通列表项（按创建时间顺序排序）
+        if (StateElement.SORT_STATE == 1)
         {
-            editSql.add(ee) ;
+            Log.i("HOMEGRAGMENGT" , "INIT") ;
+            editSql = new ArrayList<>() ;
+            editSql = DataSupport.where("istop = ?" , "1" )
+                    .order("update_time desc")
+                    .find(EditSql.class) ;
+            List<EditSql> editSqlList = new ArrayList<>() ;
+            editSqlList = DataSupport.where("istop = ?" , "0")
+                    .order("create_time")
+                    .find(EditSql.class);
+
+            for (EditSql ee : editSqlList)
+            {
+                editSql.add(ee) ;
+            }
+        }
+        //按照内容字母顺序
+        // 1 置顶列表项（按照内容字母顺序）
+        // 2 普通列表项（按照内容字母顺序）
+        else if (StateElement.SORT_STATE == 2)
+        {
+            Log.i("HOMEGRAGMENGT" , "INIT") ;
+            editSql = new ArrayList<>() ;
+            editSql = DataSupport.where("istop = ?" , "1" )
+                    .order("title")
+                    .find(EditSql.class) ;
+            List<EditSql> editSqlList = new ArrayList<>() ;
+            editSqlList = DataSupport.where("istop = ?" , "0")
+                    .order("title")
+                    .find(EditSql.class);
+
+            for (EditSql ee : editSqlList)
+            {
+                editSql.add(ee) ;
+            }
         }
         adapterData = new AdapterData(editSql) ;
 

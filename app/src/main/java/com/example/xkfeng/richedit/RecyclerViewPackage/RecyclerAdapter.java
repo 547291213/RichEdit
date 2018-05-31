@@ -173,9 +173,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         {
             String isTop = context.getResources().getString(R.string.menu_nottop) ;
             popupMenu.getMenu().getItem(1).setTitle(isTop) ;
+            popupMenu.getMenu().getItem(1).setIcon(R.drawable.icon_cancletop) ;
         }else{
             String isTop = context.getResources().getString(R.string.menu_top) ;
             popupMenu.getMenu().getItem(1).setTitle(isTop) ;
+            popupMenu.getMenu().getItem(1).setIcon(R.drawable.icon_top) ;
         }
         /*
         设置点击事件

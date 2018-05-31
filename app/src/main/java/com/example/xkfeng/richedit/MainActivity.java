@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private UpdateDataBroadcast broadcast ;
 
-    public static int CURRENT_PAGE = 1 ; //首页 收藏 关于我们三个页面的判断
+    public static int CURRENT_PAGE = 1 ; //1首页 2收藏 3关于我们  三个页面的判断
     public static int EDIT_STATE = 1 ;  //1表示添加进入Edit界面，2表示点击列表项进入Edit界面
     private LinearLayout viewPageLineaerLayout ;
 
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /*
          FloatActionButton
          1 设置点击事件
-         2 根据当前的排序方式，来动态调整Action中提示信息，以及调用方法
+         2 根据当前的排序方式，来动态调整Action中提示信息，以及根据不同页面调用方法
          */
         floatButton = (FloatingActionButton)findViewById(R.id.floatButton) ;
         floatButton.setOnClickListener(new View.OnClickListener() {
@@ -122,26 +122,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 final Snackbar snackbar = Snackbar.make(v,getResources().getString(R.string.sort_way) ,Snackbar.LENGTH_LONG);
 
-                if(StateElement.SORT_STATE == 1)
+                if(StateElement.SORT_STATE == 2)
                 {
                     snackbar.setAction(getResources().getString(R.string.sort_create_time) ,new View.OnClickListener(){
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(MainActivity.this , "按创建时间排序", Toast.LENGTH_SHORT).show();
+                            StateElement.SORT_STATE = 1 ;
+
+                            if (MainActivity.CURRENT_PAGE == 1)
+                            {
+                                homeFragment.init();
+
+                            }else if (MainActivity.CURRENT_PAGE == 2)
+                            {
+                                collectionFragment.init();
+                            }
+
                         }
                     });
-                    StateElement.SORT_STATE = 2 ;
 
-                }else if (StateElement.SORT_STATE == 2)
+
+                }else if (StateElement.SORT_STATE == 1)
                 {
                     snackbar .setAction(getResources().getString(R.string.sort_letter), new View.OnClickListener(){
                         @Override
                         public void onClick(View v) {
 
                             Toast.makeText(MainActivity.this , "按标题字母排序", Toast.LENGTH_SHORT).show();
+                            StateElement.SORT_STATE = 2 ;
+                            if (MainActivity.CURRENT_PAGE == 1)
+                            {
+                                homeFragment.init();
+
+                            }else if (MainActivity.CURRENT_PAGE == 2)
+                            {
+                                collectionFragment.init();
+                            }
+
                         }
                     });
-                    StateElement.SORT_STATE = 1 ;
+
 
                 }
                 snackbar .show();

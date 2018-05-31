@@ -3,19 +3,25 @@ package com.example.xkfeng.richedit;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xkfeng.richedit.JavaBean.EditSql;
+
+import org.litepal.crud.DataSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,7 +87,8 @@ public class EditActivity extends AppCompatActivity{
          */
         if (getIntent().getStringExtra("data") != null)
         {
-            knife.setText(getIntent().getStringExtra("data")) ;
+            knife.setText(Html.fromHtml(getIntent().getStringExtra("data"))) ;
+
 
         }
         setupBold();
@@ -97,6 +104,7 @@ public class EditActivity extends AppCompatActivity{
 
     public class MyClick implements View.OnClickListener {
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.finishText) {
@@ -109,11 +117,11 @@ public class EditActivity extends AppCompatActivity{
                     Log.i(TAG , "THE DTAT IS "+ data) ;
                     String title = data.split("\n")[0] ;
 
-                    Log.i(TAG , "THE TITLE IS "+ title) ;
+                    Log.i(TAG , "THE TITLE IS "+  knife.toHtml()) ;
                     EditSql editSql = new EditSql();
                     editSql.setCollected(false);
                     editSql.setId(id);
-                    editSql.setContent(knife.getText().toString());
+                    editSql.setContent(knife.toHtml());
                     editSql.setCreate_time(getTime());
                     editSql.setUpdate_time(getTime());
                     editSql.setTitle(title);
@@ -131,8 +139,25 @@ public class EditActivity extends AppCompatActivity{
                 //如果是对现有内容进行修改
                 else if (MainActivity.EDIT_STATE == 2)
                 {
+                     Log.i(TAG , "EDIT IS UPDATE") ;
+                     String data = knife.getText().toString() ;
+                     String title = data.split("\n")[0] ;
+                     EditSql editSql = new EditSql();
+                     editSql.setContent(knife.toHtml());
+                     editSql.setTitle(title);
+                     editSql.setUpdate_time(getTime());
+                     editSql.update(getIntent().getIntExtra("id" , 0)) ;
 
-
+                    Intent intent = new Intent() ;
+                    if (MainActivity.CURRENT_PAGE == 1)
+                    {
+                        intent.putExtra("action" ,"homeFragment") ;
+                    }else if(MainActivity.CURRENT_PAGE == 2)
+                    {
+                        intent.putExtra("action" ,"collectionFragment") ;
+                    }
+                    intent.setAction("com.example.xkfeng.richedit.mainbroadcast") ;
+                    sendBroadcast(intent);
                 }
 
                 //退出当前Activity
