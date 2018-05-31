@@ -2,7 +2,9 @@ package com.example.xkfeng.richedit.Fragment;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -67,12 +69,29 @@ public class SetFragemnt extends Fragment {
     public Uri imageUri ;
     private static final int CHOOSE_PHOTE = 2 ;
     private static final int REQUEST_CODE_WRITE = 1 ;
+    private SharedPreferences sharedPreferences ;
+    private SharedPreferences.Editor editor ;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        editor = getContext().getSharedPreferences("isFirst",Context.MODE_PRIVATE).edit() ;
+
+        sharedPreferences = getContext().getSharedPreferences("isFirst" , Context.MODE_PRIVATE) ;
+//        String imageUri =  sharedPreferences.getString("image","null" ) ;
+//        if ("null".equals(imageUri))
+//        {
+//               Log.i(TAG , "imageUri is null") ;
+//        }else {
+//            Log.i(TAG,"imageUri is not null") ;
+//
+//        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.set_layout , container , false) ;
-
 
         /*
         ListView列表项
@@ -198,9 +217,9 @@ public class SetFragemnt extends Fragment {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode , resultCode , data);
-        Log.i(TAG , "返回到SetFragment"+ "requestCode is " + requestCode
-        +"  resultCode is "+resultCode);
+        super.onActivityResult(requestCode , resultCode , data);
+//        Log.i(TAG , "返回到SetFragment"+ "requestCode is " + requestCode
+//        +"  resultCode is "+resultCode);
 
         switch (requestCode)
         {
@@ -209,10 +228,11 @@ public class SetFragemnt extends Fragment {
                 {
                     try {
                         Bitmap bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(imageUri)) ;
-                        Log.i(TAG,"THE IMAGE URI IS " + imageUri.toString()) ;
 
+                        editor.putString("image" , Environment.getExternalStorageDirectory()+File.separator+"header_image.jpg");
+                        editor.apply();
                         roundImage.setImageBitmap(bitmap);
-                    } catch (FileNotFoundException e) {
+                    } catch (Exception e) {
                         Log.e(TAG , "FILE NOT FOUND") ;
                         e.printStackTrace();
                     }
@@ -244,7 +264,7 @@ public class SetFragemnt extends Fragment {
         File outputImage = new File(Environment.getExternalStorageDirectory() ,  "header_image.jpg") ;
         try{
             outputImage.getParentFile().mkdirs() ;
-            Log.i(TAG, "目录创建成功") ;
+        //    Log.i(TAG, "目录创建成功") ;
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -326,6 +346,8 @@ public class SetFragemnt extends Fragment {
     {
         if (imagePath != null)
         {
+            editor.putString("image" ,imagePath) ;
+            editor.apply();
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath) ;
             roundImage.setImageBitmap(bitmap);
 
@@ -333,4 +355,6 @@ public class SetFragemnt extends Fragment {
             Toast.makeText(getActivity(),"failed to get image" ,Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

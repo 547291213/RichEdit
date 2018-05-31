@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Display;
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private FloatingActionButton floatButton ;
 
+    private SharedPreferences preferences ;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
+
+        preferences = getSharedPreferences("isFirst" , MODE_PRIVATE) ;
         /*
         Careme权限申请
          */
@@ -258,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         outputImage = new File(Environment.getExternalStorageDirectory() , "header_image.jpg") ;
 
         roundImage = (ImageView)findViewById(R.id.round_image) ;
-        if (outputImage.exists())
+        if (!"null".equals(preferences.getString("image" ,"null")))
         {
             Uri imageUri = getImageUri() ;
             Bitmap bitmap = null;
@@ -266,6 +272,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 Log.i(TAG,imageUri.toString()) ;
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri)) ;
+
+                bitmap = BitmapFactory.decodeFile(preferences.getString("image" ,"null")) ;
                 roundImage.setImageBitmap(bitmap);
 
             } catch (FileNotFoundException e) {
@@ -394,18 +402,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         setFragment.onActivityResult(requestCode , resultCode ,data);
+
         /*
-        关闭后重新打开。科比避免主界面和Drawer重合的BUG
+        关闭后重新打开。避免主界面和Drawer重合的BUG
          */
         mDrawerLayout.closeDrawers();
-        mDrawerLayout.openDrawer(Gravity.LEFT);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
-                Gravity.LEFT);
-        Log.i(TAG , "Width is " + setFragment.getView().getWidth())  ;
-        drawer_relayout.refreshDrawableState();
+//        mDrawerLayout.openDrawer(Gravity.LEFT);
+//
+//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
+//                Gravity.LEFT);
+//        drawer_relayout.refreshDrawableState();
+
+
         drawer_relayout.layout(setFragment.getView().getWidth(), 0,  setFragment.getView().getWidth() + display.getWidth(), display.getHeight()+30);
 
-    }
+
+        Log.i(TAG , "Width is " + setFragment.getView().getWidth())  ;
+
+     }
 
     public Uri getImageUri()
     {
