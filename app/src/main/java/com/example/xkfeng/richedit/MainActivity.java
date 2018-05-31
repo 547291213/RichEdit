@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout mDrawerLayout;
 
     private static final String TAG = "MainActivity"  ;
-    private RelativeLayout drawer_relayout ;
+    public RelativeLayout drawer_relayout ;
     private SetFragemnt setFragment ;
 
     private WindowManager manager ;
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  File outputImage ;
 
     private UpdateDataBroadcast broadcast ;
+    private UpdateLayoutBroadcast layoutBroadcast ;
 
     public static int CURRENT_PAGE = 1 ; //1首页 2收藏 3关于我们  三个页面的判断
     public static int EDIT_STATE = 1 ;  //1表示添加进入Edit界面，2表示点击列表项进入Edit界面
@@ -114,6 +115,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         IntentFilter intentFilter = new IntentFilter() ;
         intentFilter.addAction("com.example.xkfeng.richedit.mainbroadcast");
         registerReceiver(broadcast , intentFilter) ;
+
+        layoutBroadcast = new UpdateLayoutBroadcast() ;
+        IntentFilter intentFilter1 = new IntentFilter() ;
+        intentFilter1.addAction("com.example.xkfeng.richedit.layoutbroadcast");
+        registerReceiver(layoutBroadcast , intentFilter1) ;
 
 
         /*
@@ -401,20 +407,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setFragment.onActivityResult(requestCode , resultCode ,data);
-
+      //  setFragment.onActivityResult(requestCode , resultCode ,data);
+        Log.i(TAG,"返回到MainActivity") ;
         /*
         关闭后重新打开。避免主界面和Drawer重合的BUG
          */
         mDrawerLayout.closeDrawers();
-//        mDrawerLayout.openDrawer(Gravity.LEFT);
-//
-//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
-//                Gravity.LEFT);
-//        drawer_relayout.refreshDrawableState();
-
-
-        drawer_relayout.layout(setFragment.getView().getWidth(), 0,  setFragment.getView().getWidth() + display.getWidth(), display.getHeight()+30);
 
 
         Log.i(TAG , "Width is " + setFragment.getView().getWidth())  ;
@@ -457,6 +455,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public class UpdateLayoutBroadcast extends  BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mDrawerLayout.closeDrawers();
+
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
+                    Gravity.LEFT);
+        //    drawer_relayout.refreshDrawableState();
+
+            drawer_relayout.layout(setFragment.getView().getWidth(), 0,  setFragment.getView().getWidth() + display.getWidth(), display.getHeight()+30);
+            Log.i(TAG , "Layout Receiver") ;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -465,6 +480,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             unregisterReceiver(broadcast);
             broadcast=null;
+        }
+        if (layoutBroadcast != null)
+        {
+            unregisterReceiver(layoutBroadcast);
+            layoutBroadcast = null ;
         }
 
     }

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
@@ -39,6 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.github.mthli.knife.KnifeText;
+
 /**
  * Created by initializing on 2018/5/9.
  */
@@ -47,7 +50,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerview ;
     private List<EditSql> editSql ;
     private AdapterData adapterData ;
-
+    private KnifeText knifeText ;
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
@@ -94,14 +97,18 @@ public class HomeFragment extends Fragment {
         // 2 普通列表项（按照内容字母顺序）
         else if (StateElement.SORT_STATE == 2)
         {
+
             Log.i("HOMEGRAGMENGT" , "INIT") ;
             editSql = new ArrayList<>() ;
+            /*
+              用于支持中文排序 collate localized  asc
+             */
             editSql = DataSupport.where("istop = ?" , "1" )
-                    .order("title")
+                    .order("title  collate localized  asc")
                     .find(EditSql.class) ;
             List<EditSql> editSqlList = new ArrayList<>() ;
             editSqlList = DataSupport.where("istop = ?" , "0")
-                    .order("title")
+                    .order("title collate localized  asc ")
                     .find(EditSql.class);
 
             for (EditSql ee : editSqlList)
@@ -127,6 +134,14 @@ public class HomeFragment extends Fragment {
 
     public void init(String newText)
     {
+
+        //编码查找
+        //中文内容会编码后存储到数据库中，所以这里需要编码后进行查找
+
+        knifeText = new KnifeText(getContext()) ;
+        knifeText.setText(newText);
+        newText = knifeText.toHtml() ;
+
         Log.i("HOMEGRAGMENGT" , "INIT(STRING)") ;
         List<EditSql> editSqlList = new ArrayList<>() ;
         editSqlList = DataSupport.where("content like ?" ,"%"+ newText +"%")
@@ -134,11 +149,7 @@ public class HomeFragment extends Fragment {
         List<EditSql> editSqlList1 = new ArrayList<>() ;
         editSqlList1 = DataSupport.where("create_time like ? and content not like ?" ,
                 "%"+ newText +"%","%"+ newText +"%").find(EditSql.class) ;
-//        List<EditSql> editSqlList2 = new ArrayList<>() ;
-//        editSqlList2 = DataSupport.where("create_time not like ? and content not like ? and update_time like ?" ,
-//                "%"+ newText +"%","%"+ newText +"%" ,"%"+ newText +"%").find(EditSql.class) ;
-//
-//
+        Log.i("HomeFragment" , "THE TEXT IS " + newText) ;
 
         for (EditSql ee : editSqlList1)
         {

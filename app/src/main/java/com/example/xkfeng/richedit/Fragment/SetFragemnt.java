@@ -7,6 +7,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -23,7 +24,9 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.example.xkfeng.richedit.MainActivity;
 import com.example.xkfeng.richedit.R;
 import com.example.xkfeng.richedit.RoundImage.RoundImage;
 import com.example.xkfeng.richedit.SqlHelper.MyImageView;
@@ -221,6 +225,7 @@ public class SetFragemnt extends Fragment {
 //        Log.i(TAG , "返回到SetFragment"+ "requestCode is " + requestCode
 //        +"  resultCode is "+resultCode);
 
+        Log.i(TAG,"返回到SetFragment") ;
         switch (requestCode)
         {
             case TAKE_PHOTO:
@@ -254,6 +259,8 @@ public class SetFragemnt extends Fragment {
                 break ;
 
         }
+        Intent intent = new Intent("com.example.xkfeng.richedit.layoutbroadcast") ;
+        getContext().sendBroadcast(intent);
     }
     /*
     获取图片Uri地址

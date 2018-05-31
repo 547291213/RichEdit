@@ -76,12 +76,16 @@ public class CollectionFragment extends Fragment {
         else if (StateElement.SORT_STATE == 2)
         {
             editSql = new ArrayList<>() ;
+            /*
+
+              用于支持中文排序 collate localized  asc
+             */
             editSql = DataSupport.where("istop = ? and isCollected = ? " , "1"  ,"1")
-                    .order("title")
+                    .order("title collate localized  asc ")
                     .find(EditSql.class) ;
             List<EditSql> editSqlList = new ArrayList<>() ;
             editSqlList = DataSupport.where("istop = ? and isCollected = ? " , "0" , "1")
-                    .order("title")
+                    .order("title collate localized  asc ")
                     .find(EditSql.class);
 
             for (EditSql ee : editSqlList)
