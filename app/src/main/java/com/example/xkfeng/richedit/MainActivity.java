@@ -1,5 +1,6 @@
 package com.example.xkfeng.richedit;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,14 +19,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -217,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+
         /*
         布局初始化
          */
@@ -234,6 +239,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*
         初始化代码
          */
+    @SuppressLint("ResourceType")
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void init() {
 
 
@@ -301,13 +308,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         drawer_relayout = (RelativeLayout)findViewById(R.id.drawer_relayout) ;
 
-       // mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+        // mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+
+
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 //获取屏幕的宽高
                 //设置右面的布局位置  根据左面菜单的right作为右面布局的left   左面的right+屏幕的宽度（或者right的宽度这里是相等的）为右面布局的right
                 drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
+                //Log.i(TAG , "WIDTH " + setFragment.getView().getRight() ) ;
+
+
             }
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -319,7 +331,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
     }
@@ -409,13 +420,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
       //  setFragment.onActivityResult(requestCode , resultCode ,data);
         Log.i(TAG,"返回到MainActivity") ;
-        /*
-        关闭后重新打开。避免主界面和Drawer重合的BUG
-         */
-        mDrawerLayout.closeDrawers();
-
-
-        Log.i(TAG , "Width is " + setFragment.getView().getWidth())  ;
 
      }
 
@@ -457,18 +461,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public class UpdateLayoutBroadcast extends  BroadcastReceiver
     {
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onReceive(Context context, Intent intent) {
-            mDrawerLayout.closeDrawers();
+
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
 
             mDrawerLayout.openDrawer(Gravity.LEFT);
 
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
-                    Gravity.LEFT);
-        //    drawer_relayout.refreshDrawableState();
+            drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
 
-            drawer_relayout.layout(setFragment.getView().getWidth(), 0,  setFragment.getView().getWidth() + display.getWidth(), display.getHeight()+30);
-            Log.i(TAG , "Layout Receiver") ;
+
+
+       //     Log.i(TAG , "THE width is " + setFragment.getView().getWidth() ) ;
+
+            Log.i(TAG , "Layout Receiver " ) ;
         }
     }
 

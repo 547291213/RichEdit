@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.github.mthli.knife.KnifeText;
 
@@ -77,7 +79,7 @@ public class HomeFragment extends Fragment {
         // 2 普通列表项（按创建时间顺序排序）
         if (StateElement.SORT_STATE == 1)
         {
-            Log.i("HOMEGRAGMENGT" , "INIT") ;
+       //     Log.i("HOMEGRAGMENGT" , "INIT") ;
             editSql = new ArrayList<>() ;
             editSql = DataSupport.where("istop = ?" , "1" )
                     .order("update_time desc")
@@ -98,7 +100,7 @@ public class HomeFragment extends Fragment {
         else if (StateElement.SORT_STATE == 2)
         {
 
-            Log.i("HOMEGRAGMENGT" , "INIT") ;
+        //    Log.i("HOMEGRAGMENGT" , "INIT") ;
             editSql = new ArrayList<>() ;
             /*
               用于支持中文排序 collate localized  asc
@@ -137,17 +139,17 @@ public class HomeFragment extends Fragment {
 
         //编码查找
         //中文内容会编码后存储到数据库中，所以这里需要编码后进行查找
-
         knifeText = new KnifeText(getContext()) ;
         knifeText.setText(newText);
-        newText = knifeText.toHtml() ;
 
-        Log.i("HOMEGRAGMENGT" , "INIT(STRING)") ;
+//        newText = knifeText.toString() ;
+
+       // Log.i("HOMEGRAGMENGT" , "INIT(STRING)") ;
         List<EditSql> editSqlList = new ArrayList<>() ;
-        editSqlList = DataSupport.where("content like ?" ,"%"+ newText +"%")
+        editSqlList = DataSupport.where("origine_content like ?" ,"%"+ newText +"%")
                 .find(EditSql.class) ;
         List<EditSql> editSqlList1 = new ArrayList<>() ;
-        editSqlList1 = DataSupport.where("create_time like ? and content not like ?" ,
+        editSqlList1 = DataSupport.where("create_time like ? and origine_content not like ?" ,
                 "%"+ newText +"%","%"+ newText +"%").find(EditSql.class) ;
         Log.i("HomeFragment" , "THE TEXT IS " + newText) ;
 
@@ -171,6 +173,19 @@ public class HomeFragment extends Fragment {
         recyclerview.setAdapter(adapterData);
     }
 
+    /*
+
+     */
+//    public static boolean isContainChinese(String str) {
+//
+//
+//        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+//        Matcher m = p.matcher(str);
+//        if (m.find()) {
+//            return true;
+//        }
+//        return false;
+//    }
 
 
     @Override

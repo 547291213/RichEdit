@@ -124,6 +124,7 @@ public class EditActivity extends AppCompatActivity{
                     editSql.setContent(knife.toHtml());
                     editSql.setCreate_time(getTime());
                     editSql.setUpdate_time(getTime());
+                    editSql.setOrigine_content(knife.getText().toString());
                     editSql.setTitle(title);
                     editSql.setUser_id(1);
                     editSql.save();
@@ -144,6 +145,7 @@ public class EditActivity extends AppCompatActivity{
                      String title = data.split("\n")[0] ;
                      EditSql editSql = new EditSql();
                      editSql.setContent(knife.toHtml());
+                     editSql.setOrigine_content(knife.getText().toString());
                      editSql.setTitle(title);
                      editSql.setUpdate_time(getTime());
                      editSql.update(getIntent().getIntExtra("id" , 0)) ;

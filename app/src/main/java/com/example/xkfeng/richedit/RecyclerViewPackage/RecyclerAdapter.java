@@ -73,7 +73,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
                 {
                     int position = myHolder.getAdapterPosition() ;
                     EditSql editSql = editDataList.get(position) ;
-                    Log.i("RecyclerAdapter" , "THE position is " + position + " isCollected" + editSql.getIsCollected())  ;
+                  //  Log.i("RecyclerAdapter" , "THE position is " + position + " isCollected" + editSql.getIsCollected())  ;
                     if (!editSql.getIsCollected())
                     {
                         myHolder.listItemImage.setText("已收藏");
@@ -250,7 +250,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
     public void onBindViewHolder(MyHolder holder, int position) {
         EditSql  editSql = editDataList.get(position) ;
         boolean isCollect = editSql.getIsCollected() ;
-        Log.i("TAG" , "isCollect is " + isCollect)  ;
+       // Log.i("TAG" , "isCollect is " + isCollect)  ;
         String collect ;
         if (!isCollect)
         {

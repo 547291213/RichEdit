@@ -20,6 +20,8 @@ public class EditSql extends DataSupport {
 
     private String update_time ;
 
+    private String origine_content ;
+
     private int user_id ;
 
     @Column(defaultValue = "false")
@@ -57,6 +59,9 @@ public class EditSql extends DataSupport {
 
     public Boolean getIsTop(){return isTop ;} ;
 
+    public String getOrigine_content() {
+        return origine_content;
+    }
 
     public void setTop(boolean top) {
         isTop = top;
@@ -89,6 +94,10 @@ public class EditSql extends DataSupport {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setOrigine_content(String origine_content) {
+        this.origine_content = origine_content;
     }
 
     @Override
