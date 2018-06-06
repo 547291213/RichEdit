@@ -386,6 +386,7 @@ public class SetFragemnt extends Fragment {
             Toast.makeText(getActivity(),"failed to get image" ,Toast.LENGTH_SHORT).show();
         }
     }
+
     private class LocationBroadcasr extends BroadcastReceiver
     {
         @Override
