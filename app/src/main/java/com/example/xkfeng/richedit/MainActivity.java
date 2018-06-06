@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  File outputImage ;
 
     private UpdateDataBroadcast broadcast ;
-    private UpdateLayoutBroadcast layoutBroadcast ;
 
     public static int CURRENT_PAGE = 1 ; //1首页 2收藏 3关于我们  三个页面的判断
     public static int EDIT_STATE = 1 ;  //1表示添加进入Edit界面，2表示点击列表项进入Edit界面
@@ -119,11 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         IntentFilter intentFilter = new IntentFilter() ;
         intentFilter.addAction("com.example.xkfeng.richedit.mainbroadcast");
         registerReceiver(broadcast , intentFilter) ;
-
-        layoutBroadcast = new UpdateLayoutBroadcast() ;
-        IntentFilter intentFilter1 = new IntentFilter() ;
-        intentFilter1.addAction("com.example.xkfeng.richedit.layoutbroadcast");
-        registerReceiver(layoutBroadcast , intentFilter1) ;
 
 
         /*
@@ -309,6 +303,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawer_relayout = (RelativeLayout)findViewById(R.id.drawer_relayout) ;
 
         // mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+        /*
+          当在抽屉中点击图片，并且选取图片后返回时，会返回setFragment和MainActivity
+          此时：drawer_relayout会移动到初始位置，并且不响应Layout方法。
+          这里：作者尝试了先close抽屉，再open抽屉的方式，仍然不响应Layout方法，即：主界面不发生偏移
+          经过多次尝试：
+              发现通过这种事件互调的方式，可以完美解决问题
+
+         */
+        drawer_relayout.addOnLayoutChangeListener(new RelativeLayout.OnLayoutChangeListener(){
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
+            }
+        });
 
 
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -323,6 +331,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             @Override
             public void onDrawerOpened(View drawerView) {
+                Log.i(TAG , "on OPENED " + drawer_relayout.getLeft() + " " + display.getHeight() ) ;
 
             }
             @Override
@@ -459,25 +468,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public class UpdateLayoutBroadcast extends  BroadcastReceiver
-    {
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
-
-            mDrawerLayout.openDrawer(Gravity.LEFT);
-
-            drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
-
-
-
-       //     Log.i(TAG , "THE width is " + setFragment.getView().getWidth() ) ;
-
-            Log.i(TAG , "Layout Receiver " ) ;
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -487,11 +477,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             unregisterReceiver(broadcast);
             broadcast=null;
-        }
-        if (layoutBroadcast != null)
-        {
-            unregisterReceiver(layoutBroadcast);
-            layoutBroadcast = null ;
         }
 
     }

@@ -259,8 +259,8 @@ public class SetFragemnt extends Fragment {
                 break ;
 
         }
-        Intent intent = new Intent("com.example.xkfeng.richedit.layoutbroadcast") ;
-        getContext().sendBroadcast(intent);
+//        Intent intent = new Intent("com.example.xkfeng.richedit.layoutbroadcast") ;
+//        getContext().sendBroadcast(intent);
     }
     /*
     获取图片Uri地址
