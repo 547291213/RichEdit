@@ -2,6 +2,7 @@ package com.example.xkfeng.richedit.Fragment;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -33,9 +34,15 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.bumptech.glide.Glide;
 import com.example.xkfeng.richedit.MainActivity;
 import com.example.xkfeng.richedit.R;
 import com.example.xkfeng.richedit.RoundImage.RoundImage;
@@ -49,6 +56,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -75,6 +84,10 @@ public class SetFragemnt extends Fragment {
     private static final int REQUEST_CODE_WRITE = 1 ;
     private SharedPreferences sharedPreferences ;
     private SharedPreferences.Editor editor ;
+    private LocationBroadcasr locationBroadcasr ;
+
+    private TextView cityText ;
+    private ImageView cityImage ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,15 +95,10 @@ public class SetFragemnt extends Fragment {
         editor = getContext().getSharedPreferences("isFirst",Context.MODE_PRIVATE).edit() ;
 
         sharedPreferences = getContext().getSharedPreferences("isFirst" , Context.MODE_PRIVATE) ;
-//        String imageUri =  sharedPreferences.getString("image","null" ) ;
-//        if ("null".equals(imageUri))
-//        {
-//               Log.i(TAG , "imageUri is null") ;
-//        }else {
-//            Log.i(TAG,"imageUri is not null") ;
-//
-//        }
+
+
     }
+
 
     @Nullable
     @Override
@@ -204,6 +212,16 @@ public class SetFragemnt extends Fragment {
         });
 //        imageView.setAnimation(animation);
 
+
+        cityText = (TextView)view.findViewById(R.id.city) ;
+        cityText.setText("未知城市");
+
+        cityImage = (ImageView)view.findViewById(R.id.cityImage) ;
+
+        locationBroadcasr = new LocationBroadcasr() ;
+        IntentFilter intentFilter = new IntentFilter("com.example.xkfeng.locationbroadcast");
+        getContext().registerReceiver(locationBroadcasr , intentFilter) ;
+
         return view;
 
     }
@@ -217,6 +235,7 @@ public class SetFragemnt extends Fragment {
 
         if (requestCode == REQUEST_CODE_WRITE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
         {
+
              openAlbum();
         }
     }
@@ -367,6 +386,24 @@ public class SetFragemnt extends Fragment {
             Toast.makeText(getActivity(),"failed to get image" ,Toast.LENGTH_SHORT).show();
         }
     }
+    private class LocationBroadcasr extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
+            Glide.with(getContext()).load(R.drawable.city).into(cityImage) ;
+            cityText.setText(intent.getStringExtra("city"));
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (locationBroadcasr!=null)
+        {
+            getContext().unregisterReceiver(locationBroadcasr);
+            locationBroadcasr=null ;
+        }
+
+    }
 }

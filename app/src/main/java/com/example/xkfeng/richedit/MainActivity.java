@@ -1,5 +1,6 @@
 package com.example.xkfeng.richedit;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -17,8 +18,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.pm.ActivityInfoCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +43,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.example.xkfeng.richedit.Fragment.CollectionFragment;
 import com.example.xkfeng.richedit.Fragment.HomeFragment;
 import com.example.xkfeng.richedit.Fragment.SetFragemnt;
@@ -47,12 +56,13 @@ import com.example.xkfeng.richedit.StaticElement.StateElement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static int RELATIVELAYOUT_STATE =  0 ;  // 0表示不需要启动RelativeLayout的监听事件调用Layout 1表示需要调用Layout方法
-    private static final int REQUEST_CODE_WRITE = 1 ;
-    private static final int REQUEST_CODE_CAMERA = 2 ;
+    private static final int REQUEST_CODE = 1 ;
     private TextView setText;
     private TextView addText;
     private TextView homeText;
@@ -87,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private SharedPreferences preferences ;
 
+    private LocationClient mLocationClient;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,19 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-
         preferences = getSharedPreferences("isFirst" , MODE_PRIVATE) ;
-        /*
-        Careme权限申请
-         */
-        int check1 = checkSelfPermission(android.Manifest.permission.CAMERA) ;
-        if (check1!=PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{"android.Manifest.permission.CAMERA"} ,REQUEST_CODE_CAMERA );
-        }
-        else {
-            // Toast.makeText(MainActivity.this , "已经拥有权限" , Toast.LENGTH_SHORT).show();
-        }
-
         /*
         注册广播
          */
@@ -215,6 +215,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             }
         });
+
+
+
+        mLocationClient = new LocationClient(getApplicationContext()) ;
+        mLocationClient.registerLocationListener(new MyLocationListener());
+
+        List<String> permissionList = new ArrayList<>() ;
+        if (ContextCompat.checkSelfPermission(MainActivity.this , Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED)
+        {
+            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION) ;
+        }
+        if (ContextCompat.checkSelfPermission(MainActivity.this ,Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+        {
+            permissionList.add(Manifest.permission.READ_PHONE_STATE) ;
+        }
+        if (ContextCompat.checkSelfPermission(MainActivity.this , Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
+        {
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE) ;
+        }
+        if (ContextCompat.checkSelfPermission(MainActivity.this , Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED)
+        {
+            permissionList.add(Manifest.permission.CAMERA) ;
+        }
+        if (!permissionList.isEmpty())
+        {
+            String []permissions = permissionList.toArray(new String[permissionList.size()]) ;
+            ActivityCompat.requestPermissions(MainActivity.this , permissions , REQUEST_CODE);
+        }else {
+            requestLocation();
+        }
+
 
 
         /*
@@ -421,18 +452,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        setFragment.onRequestPermissionsResult(requestCode , permissions , grantResults);
 
-        if (requestCode == REQUEST_CODE_WRITE)
+        if (requestCode == REQUEST_CODE)
         {
-            setFragment.onRequestPermissionsResult(requestCode , permissions , grantResults);
-            Toast.makeText(MainActivity.this , "成功获取了权限" , Toast.LENGTH_SHORT).show();
+            if (grantResults.length > 0)
+            {
+                for (int result : grantResults)
+                {
+                    if (result!=PackageManager.PERMISSION_GRANTED)
+                    {
+                        Toast.makeText(MainActivity.this , "必须同意所有的权限才可以正常使用",Toast.LENGTH_SHORT).show();
+                    }
+                    finish();
+                    return;
+                }
+                requestLocation();
+            }
+
         }
-        else if (requestCode == REQUEST_CODE_CAMERA && grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+       else
         {
-            Toast.makeText(MainActivity.this , "相机权限获取" ,Toast.LENGTH_LONG).show();
-        }else
-        {
-            Log.i(TAG,"没有获取权限")  ;
+            Toast.makeText(MainActivity.this , "发生了未知错误" , Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -491,5 +532,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             broadcast=null;
         }
 
+        /*
+        停止位置测量
+         */
+        mLocationClient.stop();
+
     }
+
+
+    private class MyLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(final BDLocation bdLocation) {
+            StringBuilder stringBuilder = new StringBuilder() ;
+            stringBuilder.append(bdLocation.getCity() + " ");
+            stringBuilder.append(bdLocation.getDistrict()) ;
+
+            Log.i(TAG , "ON RECEIVE LOCATION"+stringBuilder.toString()) ;
+            Intent intent = new Intent("com.example.xkfeng.locationbroadcast") ;
+            intent.putExtra("city" , stringBuilder.toString()) ;
+            sendBroadcast(intent);
+        }
+
+        @Override
+        public void onConnectHotSpotMessage(String s, int i) {
+            super.onConnectHotSpotMessage(s, i);
+        }
+
+        @Override
+        public void onLocDiagnosticMessage(int i, int i1, String s) {
+            super.onLocDiagnosticMessage(i, i1, s);
+        }
+    }
+
+    private void requestLocation(){
+
+        Log.i(TAG , "REQUESTLOCATION") ;
+        initLocation();
+        mLocationClient.start();
+    }
+
+    private void initLocation()
+    {
+        LocationClientOption option = new LocationClientOption() ;
+        option.setScanSpan(1000 * 60 * 60);
+        option.setIsNeedAddress(true);
+        option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
+        mLocationClient.setLocOption(option);
+    }
+
 }

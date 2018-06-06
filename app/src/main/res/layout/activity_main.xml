@@ -137,7 +137,7 @@
     <fragment
         android:id="@+id/id_right_menu"
         android:name="com.example.xkfeng.richedit.Fragment.SetFragemnt"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
         android:tag="left" />

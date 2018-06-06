@@ -7,164 +7,98 @@
     android:keepScreenOn="true"
     android:layout_height="match_parent">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/backImageView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="250dp"-->
-        <!--android:src="@drawable/backimage2"-->
-        <!--android:scaleType="center"-->
-        <!--/>-->
-    <com.example.xkfeng.richedit.SqlHelper.MyImageView
-        android:id="@+id/backImageView"
+    <RelativeLayout
+        android:id="@+id/TopRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="250dp">
+        <com.example.xkfeng.richedit.SqlHelper.MyImageView
+            android:id="@+id/backImageView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+
+            />
+        <com.example.xkfeng.richedit.RoundImage.RoundImage
+            android:id="@+id/round_image"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:scaleType="fitXY"
+            android:layout_above="@id/userName"
+            android:layout_marginLeft="10dp"
+
+            />
+        <!--android:src="@mipmap/cat"-->
+        <TextView
+            android:id="@+id/mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/line_view"
+            android:text="Email: xp134525@foxmail.com"
+            android:textColor="@color/waveColor1"
+            android:textSize="15sp"
+            android:layout_margin="10dp"
+            />
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/mail"
+            android:text="Author: Ke Feng"
+            android:textSize="15sp"
+            android:textColor="@color/waveColor1"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
 
 
-        />
-    <com.example.xkfeng.richedit.RoundImage.RoundImage
+            />
+        <View
+            android:id="@+id/line_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorPrimary"
+            />
 
-        android:id="@+id/round_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginLeft="10dp"
+    </RelativeLayout>
+
+     <RelativeLayout
+         android:id="@+id/BottomRelativeLayout"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_below="@id/TopRelativeLayout"
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+
+         >
+         <android.support.design.widget.NavigationView
+             android:id="@+id/navigationView"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             app:menu="@menu/nav_menu"
+             >
+
+         </android.support.design.widget.NavigationView>
+
+
+     </RelativeLayout>
+    <ImageView
+        android:id="@+id/cityImage"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:layout_alignParentLeft="true"
         android:scaleType="fitXY"
         />
-    <!--android:src="@mipmap/cat"-->
-
-    <View
-        android:id="@+id/line_view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@id/round_image"
-        android:background="@color/colorPrimary"
-        />
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/city"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/line_1"
-        android:layout_below="@id/line_view"
-        android:keepScreenOn="true"
-        android:touchscreenBlocksFocus="true"
-        >
-        <ImageView
-            style="@style/ImageData"
-            android:src="@drawable/people"
-            />
-        <TextView
-            style="@style/SetData"
-            android:text="性别"
-            android:layout_weight="2"
-            />
-        <EditText
-           style="@style/SetData"
-            android:hint="男"
-            android:gravity="right"
-            android:layout_weight="1"
-            />
+        android:textSize="20sp"
+        android:textColor="@color/waveColor1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
 
+        />
 
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line_2"
-        android:layout_below="@id/line_1"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            style="@style/ImageData"
-            android:src="@drawable/year"
-            />
-        <TextView
-            style="@style/SetData"
-            android:text="年龄"
-            android:layout_weight="2"
-            />
-        <EditText
-            style="@style/SetData"
-            android:hint="18"
-            android:gravity="right"
-            android:layout_weight="1"
-            />
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line_3"
-        android:layout_below="@id/line_2"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            style="@style/ImageData"
-            android:src="@drawable/length"
-            />
-        <TextView
-            style="@style/SetData"
-            android:text="身高"
-            android:layout_weight="2"
-            />
-        <EditText
-            style="@style/SetData"
-            android:hint="180"
-            android:gravity="right"
-            android:layout_weight="1"
-            />
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line_4"
-        android:layout_below="@id/line_3"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            style="@style/ImageData"
-            android:src="@drawable/tree"
-            />
-        <TextView
-            style="@style/SetData"
-            android:text="体重"
-            android:layout_weight="2"
-            />
-        <EditText
-            style="@style/SetData"
-            android:hint="75kg"
-            android:gravity="right"
-            android:layout_weight="1"
-            />
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line_5"
-        android:layout_below="@id/line_4"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            style="@style/ImageData"
-            android:src="@drawable/pen"
-            />
-        <TextView
-            style="@style/SetData"
-            android:text="爱好"
-            android:layout_weight="2"
-            />
-        <EditText
-            style="@style/SetData"
-            android:hint="看书"
-            android:gravity="right"
-            android:layout_weight="1"
-            />
-
-    </LinearLayout>
-    <!--<Button-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:text="设置"-->
-        <!--android:background="@color/waveColor1"-->
-        <!--/>-->
 </RelativeLayout>
