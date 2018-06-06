@@ -50,6 +50,7 @@ import java.io.FileNotFoundException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static int RELATIVELAYOUT_STATE =  0 ;  // 0表示不需要启动RelativeLayout的监听事件调用Layout 1表示需要调用Layout方法
     private static final int REQUEST_CODE_WRITE = 1 ;
     private static final int REQUEST_CODE_CAMERA = 2 ;
     private TextView setText;
@@ -314,7 +315,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawer_relayout.addOnLayoutChangeListener(new RelativeLayout.OnLayoutChangeListener(){
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
+                if (RELATIVELAYOUT_STATE == 1)
+                {
+                    drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
+                    Log.i(TAG , "LAYOUT") ;
+                }
+
+
             }
         });
 
@@ -322,6 +329,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
+                if ( RELATIVELAYOUT_STATE == 1)
+                {
+                    RELATIVELAYOUT_STATE = 0 ;
+                }
                 //获取屏幕的宽高
                 //设置右面的布局位置  根据左面菜单的right作为右面布局的left   左面的right+屏幕的宽度（或者right的宽度这里是相等的）为右面布局的right
                 drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
@@ -332,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDrawerOpened(View drawerView) {
                 Log.i(TAG , "on OPENED " + drawer_relayout.getLeft() + " " + display.getHeight() ) ;
+
 
             }
             @Override
@@ -430,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       //  setFragment.onActivityResult(requestCode , resultCode ,data);
         Log.i(TAG,"返回到MainActivity") ;
 
-     }
+    }
 
     public Uri getImageUri()
     {

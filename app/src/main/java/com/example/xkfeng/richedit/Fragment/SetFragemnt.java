@@ -123,6 +123,10 @@ public class SetFragemnt extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i(TAG , "RouunImage is clicked") ;
+                /*
+                当点击了图片的时候，设置MainActivity需要调用监听事件来启动RelativeLayout的Layout方法，重新布局
+                 */
+                MainActivity.RELATIVELAYOUT_STATE = 1 ;
                 //AlertDialog.Builder alertDialog =
                 new AlertDialog.Builder(getContext())
                         .setCancelable(true)
