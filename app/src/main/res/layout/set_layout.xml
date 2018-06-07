@@ -73,6 +73,9 @@
          android:layout_height="match_parent"
          android:layout_below="@id/TopRelativeLayout"
          xmlns:app="http://schemas.android.com/apk/res-auto"
+         android:focusedByDefault="true"
+         android:focusableInTouchMode="true"
+         android:focusable="true"
 
          >
          <android.support.design.widget.NavigationView

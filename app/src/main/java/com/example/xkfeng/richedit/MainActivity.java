@@ -341,8 +341,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
         /*
-          当在抽屉中点击图片，并且选取图片后返回时，会返回setFragment和MainActivity
+          1 当在抽屉中点击图片，并且选取图片后返回时，会返回setFragment和MainActivity
           此时：drawer_relayout会移动到初始位置，并且不响应Layout方法。
+          2 当点击抽屉中Navigation item控件时，drawer_relayout也会默认回到初始位置
+
           这里：作者尝试了先close抽屉，再open抽屉的方式，仍然不响应Layout方法，即：主界面不发生偏移
           经过多次尝试：
               发现通过这种事件互调的方式，可以完美解决问题
@@ -380,10 +382,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDrawerOpened(View drawerView) {
                 Log.i(TAG , "on OPENED " + drawer_relayout.getLeft() + " " + display.getHeight() ) ;
 
-
+                searchView.setFocusable(false);
+                searchView.setEnabled(false);
+                searchView.clearFocus();
             }
             @Override
             public void onDrawerClosed(View drawerView) {
+                searchView.setFocusable(true);
+                searchView.setEnabled(true);
 
             }
             @Override
@@ -549,18 +555,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 frameLayout.setBackground(getResources().getDrawable(R.drawable.morn));
                 MODE_STATE = 0 ;
             }
-            UpdateLayout() ;
         }
     }
 
-    public void  UpdateLayout()
-    {
-          /*
-                  重新修正布局
-             */
-        drawer_relayout.layout(setFragment.getView().getRight() , 0 , display.getWidth()+setFragment.getView().getRight(), display.getHeight()+30);
-
-    }
 
     @Override
     protected void onDestroy() {

@@ -233,10 +233,19 @@ public class SetFragemnt extends Fragment {
         getContext().registerReceiver(locationBroadcasr , intentFilter) ;
 
         navigationView = (NavigationView)view.findViewById(R.id.navigationView) ;
+
+        navigationView.setClickable(true);
+        navigationView.setSelected(true);
+        navigationView.dispatchSetSelected(true);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                /*
+                     当点击了NavigationView  item控件的时候，设置MainActivity需要调用监听事件来启动RelativeLayout的Layout方法，重新布局
+                 */
+                MainActivity.RELATIVELAYOUT_STATE = 1 ;
+
                 if (item.getItemId() == R.id.navGithub)
                 {
                     Intent intent = new Intent() ;
@@ -244,13 +253,14 @@ public class SetFragemnt extends Fragment {
                     Uri uri = Uri.parse("https://github.com/547291213/RichEdit") ;
                     intent.setData(uri) ;
                     startActivity(intent);
-
+                    navigationView.setCheckedItem(R.id.navGithub);
                 }
                 else if (item.getItemId() == R.id.navNight)
                 {
                     /*
                     将当前界面的背景颜色做出修改
                      */
+                    navigationView.setCheckedItem(R.id.navNight);
                     if (MainActivity.MODE_STATE == 1)
                     {
                         navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.morn));
