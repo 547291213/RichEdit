@@ -5,14 +5,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
-    tools:context="com.example.xkfeng.richedit.MainActivity">
+    tools:context="com.example.xkfeng.richedit.MainActivity"
+    >
 
     <RelativeLayout
         android:id="@+id/drawer_relayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:keepScreenOn="false"
+
         >
 
         <LinearLayout
@@ -26,10 +27,10 @@
                 android:id="@+id/searchview"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="0dp"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:background="@drawable/query_back"
+                android:background="@drawable/morn"
                 app:iconifiedByDefault="false"
 
                 app:queryHint="请输入关键字"
@@ -44,7 +45,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/titleLineId"
             android:layout_marginBottom="50dp"
-            android:background="#fff"
+            android:background="@drawable/morn"
             >
             <android.support.design.widget.FloatingActionButton
 

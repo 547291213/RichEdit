@@ -23,12 +23,14 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -69,7 +71,8 @@ import static android.app.Activity.RESULT_OK;
 public class SetFragemnt extends Fragment {
 
     private final static String TAG = "SetFragment" ;
-    private MyImageView imageView ;
+//    private MyImageView imageView ;
+    private ImageView imageView ;
     private Animation animation ;
     private  static boolean ANIMA_CHANGE = false;
     private RoundImage roundImage ;
@@ -89,6 +92,9 @@ public class SetFragemnt extends Fragment {
     private TextView cityText ;
     private ImageView cityImage ;
 
+    private NavigationView navigationView ;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +108,7 @@ public class SetFragemnt extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.set_layout , container , false) ;
 
         /*
@@ -175,7 +181,10 @@ public class SetFragemnt extends Fragment {
             }
         });
 
-        imageView = (MyImageView) view.findViewById(R.id.backImageView) ;
+        imageView = (ImageView) view.findViewById(R.id.backImageView) ;
+
+//        Glide.with(getContext()).load(R.drawable.backimage2).into(imageView) ;
+        imageView.setImageResource(R.drawable.backimage2);
         animation = AnimationUtils.loadAnimation(getContext(),R.anim.image_anima) ;
         animation.setInterpolator(new LinearInterpolator());
         animation.setFillAfter(true);
@@ -189,6 +198,7 @@ public class SetFragemnt extends Fragment {
             @Override
             public void onAnimationEnd(Animation animation) {
                 Animation ani ;
+
                 if (!ANIMA_CHANGE)
                 {
                     ANIMA_CHANGE = true ;
@@ -201,7 +211,7 @@ public class SetFragemnt extends Fragment {
                 ani.setAnimationListener(this);
                 ani.setFillAfter(true);
                 ani.setInterpolator(new LinearInterpolator());
-                ani.setRepeatMode(Animation.REVERSE);
+                //ani.setRepeatMode(Animation.REVERSE);
                 imageView.startAnimation(ani);
             }
 
@@ -221,6 +231,51 @@ public class SetFragemnt extends Fragment {
         locationBroadcasr = new LocationBroadcasr() ;
         IntentFilter intentFilter = new IntentFilter("com.example.xkfeng.locationbroadcast");
         getContext().registerReceiver(locationBroadcasr , intentFilter) ;
+
+        navigationView = (NavigationView)view.findViewById(R.id.navigationView) ;
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.navGithub)
+                {
+                    Intent intent = new Intent() ;
+                    intent.setAction("android.intent.action.VIEW") ;
+                    Uri uri = Uri.parse("https://github.com/547291213/RichEdit") ;
+                    intent.setData(uri) ;
+                    startActivity(intent);
+
+                }
+                else if (item.getItemId() == R.id.navNight)
+                {
+                    /*
+                    将当前界面的背景颜色做出修改
+                     */
+                    if (MainActivity.MODE_STATE == 1)
+                    {
+                        navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.morn));
+                        //Glide.with(getContext()).load(R.drawable.backimage2).into(imageView) ;
+                        imageView.setImageResource(R.drawable.backimage2);
+
+                        item.setTitle("夜间模式") ;
+                    }else {
+                        navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.night));
+                        //Glide.with(getContext()).load(R.drawable.starrysky).into(imageView) ;
+                        imageView.setImageResource(R.drawable.starrysky);
+
+                        item.setTitle("日间模式") ;
+                    }
+                    /*
+                    发送广播，去修改主界面中响应的背景颜色
+                     */
+
+                    Intent intent =  new Intent("com.example.richedit.changemodecast") ;
+                    getContext().sendBroadcast(intent);
+                }
+
+                return false;
+            }
+        });
 
         return view;
 

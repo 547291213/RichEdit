@@ -26,4 +26,11 @@
     </style>
     <style name="DescriptionTheme" parent="AppTheme" ></style>
 
+    <style name="Morn">
+        <item name="android:background">#fff</item>
+    </style>
+
+    <style name="Night">
+        <item name="android:background">#a7a7a7</item>
+    </style>
 </resources>

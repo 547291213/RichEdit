@@ -62,6 +62,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static int RELATIVELAYOUT_STATE =  0 ;  // 0表示不需要启动RelativeLayout的监听事件调用Layout 1表示需要调用Layout方法
+    public static int MODE_STATE = 0 ;  // 0 表示日间模式 ， 1表示夜间模式
     private static final int REQUEST_CODE = 1 ;
     private TextView setText;
     private TextView addText;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  File outputImage ;
 
     private UpdateDataBroadcast broadcast ;
+    private ChangeModeCroadcast modeCroadcast ;
 
     public static int CURRENT_PAGE = 1 ; //1首页 2收藏 3关于我们  三个页面的判断
     public static int EDIT_STATE = 1 ;  //1表示添加进入Edit界面，2表示点击列表项进入Edit界面
@@ -120,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentFilter.addAction("com.example.xkfeng.richedit.mainbroadcast");
         registerReceiver(broadcast , intentFilter) ;
 
+        modeCroadcast = new ChangeModeCroadcast() ;
+        IntentFilter intentFilter1 = new IntentFilter("com.example.richedit.changemodecast") ;
+        registerReceiver(modeCroadcast , intentFilter1) ;
 
         /*
          FloatActionButton
@@ -521,6 +526,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /*
+        BroadcastReceive广播
+        功能：用于页面模式切换，日间模式和夜晚模式
+        作用地方：当用户点击了抽屉中的夜间模式/日间模式项目时
+     */
+    public class ChangeModeCroadcast extends  BroadcastReceiver
+    {
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            //判断当前是日渐模式还是夜间模式 然后做出调整
+            if(MODE_STATE == 0 )
+            {
+                searchView.setBackground(getResources().getDrawable(R.drawable.night));
+                frameLayout.setBackground(getResources().getDrawable(R.drawable.night));
+                MODE_STATE = 1 ;
+            }else
+            {
+                searchView.setBackground(getResources().getDrawable(R.drawable.morn));
+                frameLayout.setBackground(getResources().getDrawable(R.drawable.morn));
+                MODE_STATE = 0 ;
+            }
+            UpdateLayout() ;
+        }
+    }
+
+    public void  UpdateLayout()
+    {
+          /*
+                  重新修正布局
+             */
+        drawer_relayout.layout(setFragment.getView().getRight() , 0 , display.getWidth()+setFragment.getView().getRight(), display.getHeight()+30);
+
+    }
 
     @Override
     protected void onDestroy() {
@@ -532,6 +572,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             broadcast=null;
         }
 
+        if (modeCroadcast!=null)
+        {
+            unregisterReceiver(modeCroadcast);
+            modeCroadcast = null ;
+        }
         /*
         停止位置测量
          */

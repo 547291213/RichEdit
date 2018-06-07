@@ -11,12 +11,18 @@
         android:id="@+id/TopRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="250dp">
-        <com.example.xkfeng.richedit.SqlHelper.MyImageView
+        <ImageView
             android:id="@+id/backImageView"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-
+            android:scaleType="centerCrop"
             />
+        <!--<com.example.xkfeng.richedit.SqlHelper.MyImageView-->
+            <!--android:id="@+id/backImageView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="250dp"-->
+
+            <!--/>-->
         <com.example.xkfeng.richedit.RoundImage.RoundImage
             android:id="@+id/round_image"
             android:layout_width="64dp"
@@ -74,6 +80,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              app:menu="@menu/nav_menu"
+             android:background="@drawable/morn"
              >
 
          </android.support.design.widget.NavigationView>
