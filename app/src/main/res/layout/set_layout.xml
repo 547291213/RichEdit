@@ -17,12 +17,7 @@
             android:layout_height="250dp"
             android:scaleType="centerCrop"
             />
-        <!--<com.example.xkfeng.richedit.SqlHelper.MyImageView-->
-            <!--android:id="@+id/backImageView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="250dp"-->
 
-            <!--/>-->
         <com.example.xkfeng.richedit.RoundImage.RoundImage
             android:id="@+id/round_image"
             android:layout_width="64dp"

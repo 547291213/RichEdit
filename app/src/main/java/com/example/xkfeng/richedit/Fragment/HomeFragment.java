@@ -131,18 +131,28 @@ public class HomeFragment extends Fragment {
         recyclerview.addItemDecoration(divider);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setHasFixedSize(true);
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(adapterData);
     }
 
+    /*
+       搜索内容查找
+       注：一开始作者想的是：
+           因为数据库存储的内容是转换为html格式的，那么就把传入的newText用KnifeText也转换为html，然后去数据库中进行模糊查找
+           ，但是后来发现一个重要BUG，在富文本和中文规范下的存储类似：&#11111  .那么当我输入11111的时候，也会显示对对应的条目，但是我在存储的时候，并没有写入11111这段内容。
+            knifeText = new KnifeText(getContext()) ;
+            knifeText.setText(newText);
+            newText = knifeText.toHtml() ;
+
+           问题解决方式：
+           在数据库中新加一个字段，origin_content,表示原生内容，即：不论有没有进行富文本操作，都把输入的字段直接转为String字段，存入数据库。
+           那么在查询的时候newText也不需要转为html格式，直接进行模糊查询就可以了。
+
+
+     */
     public void init(String newText)
     {
 
-        //编码查找
-        //中文内容会编码后存储到数据库中，所以这里需要编码后进行查找
-        knifeText = new KnifeText(getContext()) ;
-        knifeText.setText(newText);
-
-//        newText = knifeText.toString() ;
 
        // Log.i("HOMEGRAGMENGT" , "INIT(STRING)") ;
         List<EditSql> editSqlList = new ArrayList<>() ;
@@ -170,23 +180,9 @@ public class HomeFragment extends Fragment {
         recyclerview.addItemDecoration(divider);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setHasFixedSize(true);
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(adapterData);
     }
-
-    /*
-
-     */
-//    public static boolean isContainChinese(String str) {
-//
-//
-//        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
-//        Matcher m = p.matcher(str);
-//        if (m.find()) {
-//            return true;
-//        }
-//        return false;
-//    }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

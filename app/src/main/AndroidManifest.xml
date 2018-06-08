@@ -53,6 +53,10 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".ServicePackage.UpdateService">
+
+        </service>
+
         <provider
             android:authorities="com.example.xkfeng.richedit.fileprovider"
             android:name="android.support.v4.content.FileProvider"

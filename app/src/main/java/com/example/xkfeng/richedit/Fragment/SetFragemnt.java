@@ -48,7 +48,8 @@ import com.bumptech.glide.Glide;
 import com.example.xkfeng.richedit.MainActivity;
 import com.example.xkfeng.richedit.R;
 import com.example.xkfeng.richedit.RoundImage.RoundImage;
-import com.example.xkfeng.richedit.SqlHelper.MyImageView;
+import com.example.xkfeng.richedit.ServicePackage.UpdateService;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -71,7 +72,6 @@ import static android.app.Activity.RESULT_OK;
 public class SetFragemnt extends Fragment {
 
     private final static String TAG = "SetFragment" ;
-//    private MyImageView imageView ;
     private ImageView imageView ;
     private Animation animation ;
     private  static boolean ANIMA_CHANGE = false;
@@ -93,7 +93,8 @@ public class SetFragemnt extends Fragment {
     private ImageView cityImage ;
 
     private NavigationView navigationView ;
-
+    private MenuItem modeItem ;
+    private UpdateUiModeBroadcast updateUiModeBroadcast ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +103,17 @@ public class SetFragemnt extends Fragment {
 
         sharedPreferences = getContext().getSharedPreferences("isFirst" , Context.MODE_PRIVATE) ;
 
+        /*
+        注册广播监听
+         */
+        updateUiModeBroadcast = new UpdateUiModeBroadcast() ;
+        IntentFilter intentFilter = new IntentFilter("com.example.richedit.changemodecast") ;
+        intentFilter.addCategory("updateUimodeByService");
+        getContext().registerReceiver(updateUiModeBroadcast,intentFilter) ;
 
+        locationBroadcasr = new LocationBroadcasr() ;
+        IntentFilter intentFilter1 = new IntentFilter("com.example.xkfeng.locationbroadcast");
+        getContext().registerReceiver(locationBroadcasr , intentFilter1) ;
     }
 
 
@@ -228,15 +239,18 @@ public class SetFragemnt extends Fragment {
 
         cityImage = (ImageView)view.findViewById(R.id.cityImage) ;
 
-        locationBroadcasr = new LocationBroadcasr() ;
-        IntentFilter intentFilter = new IntentFilter("com.example.xkfeng.locationbroadcast");
-        getContext().registerReceiver(locationBroadcasr , intentFilter) ;
+
 
         navigationView = (NavigationView)view.findViewById(R.id.navigationView) ;
+        /*
+        实践发现：不能通过view.findViewById来获取menuitem
+         */
+        modeItem = (MenuItem) navigationView.getMenu().getItem(1) ;
+        Log.i(TAG , "THE MODEITEM IS " + modeItem.getItemId()) ;
 
-        navigationView.setClickable(true);
-        navigationView.setSelected(true);
-        navigationView.dispatchSetSelected(true);
+//        navigationView.setClickable(true);
+//        navigationView.setSelected(true);
+//        navigationView.dispatchSetSelected(true);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -257,29 +271,28 @@ public class SetFragemnt extends Fragment {
                 }
                 else if (item.getItemId() == R.id.navNight)
                 {
+
                     /*
-                    将当前界面的背景颜色做出修改
+                    对状态做出修改
                      */
-                    navigationView.setCheckedItem(R.id.navNight);
                     if (MainActivity.MODE_STATE == 1)
                     {
-                        navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.morn));
-                        //Glide.with(getContext()).load(R.drawable.backimage2).into(imageView) ;
-                        imageView.setImageResource(R.drawable.backimage2);
-
-                        item.setTitle("夜间模式") ;
-                    }else {
-                        navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.night));
-                        //Glide.with(getContext()).load(R.drawable.starrysky).into(imageView) ;
-                        imageView.setImageResource(R.drawable.starrysky);
-
-                        item.setTitle("日间模式") ;
+                        MainActivity.MODE_STATE = 0 ;
                     }
+                    else {
+                        MainActivity.MODE_STATE = 1 ;
+                    }
+                     /*
+                    将当前界面的背景颜色做出修改
+                     */
+                    UpdateUiMode() ;
                     /*
                     发送广播，去修改主界面中响应的背景颜色
                      */
 
                     Intent intent =  new Intent("com.example.richedit.changemodecast") ;
+                    intent.addCategory("updateUimodeBySetFragment");
+
                     getContext().sendBroadcast(intent);
                 }
 
@@ -290,6 +303,59 @@ public class SetFragemnt extends Fragment {
         return view;
 
     }
+    /*
+        功能：将当前界面的背景颜色做出修改，日间模式或者夜间模式的切换
+        作用地方：
+        1 用户点击了抽屉中日间/夜间模式列表项的时候调用
+        2 系统后台服务根据当前时间自动切换模式的时候调用
+    */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void UpdateUiMode()
+    {
+        navigationView.setCheckedItem(R.id.navNight);
+
+        if (MainActivity.MODE_STATE == 0)
+        {
+            navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.morn));
+            //Glide.with(getContext()).load(R.drawable.backimage2).into(imageView) ;
+            imageView.setImageResource(R.drawable.backimage2);
+
+             modeItem.setTitle("夜间模式") ;
+        }else {
+            navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.night));
+            //Glide.with(getContext()).load(R.drawable.starrysky).into(imageView) ;
+            imageView.setImageResource(R.drawable.starrysky);
+
+            modeItem.setTitle("日间模式") ;
+        }
+    }
+
+    /*
+    定时更新为  日间模式或夜间模式的响应
+     */
+    private class UpdateUiModeBroadcast extends BroadcastReceiver
+    {
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("BROADCAST" , "IN UPDATEUIMODEBROADCAST") ;
+            UpdateUiMode();
+        }
+    }
+    /*
+    获取当前位置的响应
+     */
+    private class LocationBroadcasr extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Glide.with(getContext()).load(R.drawable.city).into(cityImage) ;
+            cityText.setText(intent.getStringExtra("city"));
+        }
+    }
+
+
 
     /*
     权限获取
@@ -452,15 +518,6 @@ public class SetFragemnt extends Fragment {
         }
     }
 
-    private class LocationBroadcasr extends BroadcastReceiver
-    {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            Glide.with(getContext()).load(R.drawable.city).into(cityImage) ;
-            cityText.setText(intent.getStringExtra("city"));
-        }
-    }
 
 
     @Override
@@ -470,6 +527,11 @@ public class SetFragemnt extends Fragment {
         {
             getContext().unregisterReceiver(locationBroadcasr);
             locationBroadcasr=null ;
+        }
+        if (updateUiModeBroadcast != null)
+        {
+            getContext().unregisterReceiver(updateUiModeBroadcast);
+            updateUiModeBroadcast =null ;
         }
 
     }

@@ -52,11 +52,15 @@ import com.example.xkfeng.richedit.Fragment.CollectionFragment;
 import com.example.xkfeng.richedit.Fragment.HomeFragment;
 import com.example.xkfeng.richedit.Fragment.SetFragemnt;
 import com.example.xkfeng.richedit.Fragment.TipFragment;
+import com.example.xkfeng.richedit.ServicePackage.UpdateService;
 import com.example.xkfeng.richedit.StaticElement.StateElement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
+
         preferences = getSharedPreferences("isFirst" , MODE_PRIVATE) ;
         /*
         注册广播
@@ -124,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         modeCroadcast = new ChangeModeCroadcast() ;
         IntentFilter intentFilter1 = new IntentFilter("com.example.richedit.changemodecast") ;
+        intentFilter1.addCategory("updateUimodeByService");
+        intentFilter1.addCategory("updateUimodeBySetFragment");
         registerReceiver(modeCroadcast , intentFilter1) ;
 
         /*
@@ -252,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+        //启动服务
+        Intent intent = new Intent() ;
+        intent.setClass(MainActivity.this , UpdateService.class) ;
+        startService(intent) ;
 
         /*
         布局初始化
@@ -542,18 +553,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.i("BROADCAST" , "IN CHANGEMODECROADCAST") ;
 
             //判断当前是日渐模式还是夜间模式 然后做出调整
-            if(MODE_STATE == 0 )
+            if (intent.getStringExtra("DATE")!=null)
+            {
+
+                if ("MORN".equals(intent.getStringExtra("DATE")))
+                {
+                    searchView.setBackground(getResources().getDrawable(R.drawable.morn));
+                    frameLayout.setBackground(getResources().getDrawable(R.drawable.morn));
+                }
+                else {
+                    searchView.setBackground(getResources().getDrawable(R.drawable.night));
+                    frameLayout.setBackground(getResources().getDrawable(R.drawable.night));
+                }
+                return  ;
+            }
+            if(MODE_STATE == 1 )
             {
                 searchView.setBackground(getResources().getDrawable(R.drawable.night));
                 frameLayout.setBackground(getResources().getDrawable(R.drawable.night));
-                MODE_STATE = 1 ;
             }else
             {
                 searchView.setBackground(getResources().getDrawable(R.drawable.morn));
                 frameLayout.setBackground(getResources().getDrawable(R.drawable.morn));
-                MODE_STATE = 0 ;
             }
         }
     }
