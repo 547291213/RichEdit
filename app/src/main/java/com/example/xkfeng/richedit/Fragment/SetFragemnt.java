@@ -79,8 +79,8 @@ public class SetFragemnt extends Fragment {
 
     private SimpleAdapter simpleAdapter ;
     private List<Map<String , Object>> mapList ;
-    private final String[] array_string = new String[]{"拍照","从相册选取"};
-    private final int[] image_id = new int[]{R.drawable.camera , R.drawable.photo_album} ;
+    private final String[] array_string = new String[]{"用相机拍照","从相册选取"};
+    private final int[] image_id = new int[]{R.drawable.ic_camera , R.drawable.ic_photoalbum} ;
     private static final int TAKE_PHOTO = 1 ;
     public Uri imageUri ;
     private static final int CHOOSE_PHOTE = 2 ;
