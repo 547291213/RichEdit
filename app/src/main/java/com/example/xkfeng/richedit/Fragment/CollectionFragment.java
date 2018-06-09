@@ -1,5 +1,6 @@
 package com.example.xkfeng.richedit.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -96,7 +97,7 @@ public class CollectionFragment extends Fragment {
         }
 
 
-        adapterData = new AdapterData(editSql) ;
+        adapterData = new AdapterData(editSql , getContext()) ;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) ;
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
@@ -111,8 +112,8 @@ public class CollectionFragment extends Fragment {
 
     }
     public class AdapterData extends RecyclerAdapter {
-        public AdapterData(List<EditSql> editSql) {
-            super(editSql);
+        public AdapterData(List<EditSql> editSql , Context mContext) {
+            super(editSql , mContext);
         }
     }
 }

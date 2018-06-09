@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowEnableSplitTouch" >false </item>
+        <item name="android:splitMotionEvents" >false </item>
     </style>
 
     <!--// <item name="android:textColor">@color/waveColor1</item>-->

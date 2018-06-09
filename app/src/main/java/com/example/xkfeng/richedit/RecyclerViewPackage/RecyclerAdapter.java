@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +15,14 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Filter;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +30,7 @@ import com.example.xkfeng.richedit.EditActivity;
 import com.example.xkfeng.richedit.JavaBean.EditSql;
 import com.example.xkfeng.richedit.MainActivity;
 import com.example.xkfeng.richedit.R;
+import com.example.xkfeng.richedit.Utils.Utils;
 
 import org.litepal.crud.DataSupport;
 import org.w3c.dom.Text;
@@ -36,36 +43,73 @@ import java.util.List;
  * Created by initializing on 2018/5/18.
  */
 
-public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHolder> {
+public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHolder> implements MyScrollView.IonSlidingButtonListener{
     private  List<EditSql> editDataList;//对象列表
-    private Context context ;//context
-    public  RecyclerAdapter(List<EditSql> editSql)
+
+
+    private Context context ;
+    private MyScrollView mMenu = null;
+    public  RecyclerAdapter(List<EditSql> editSql ,Context context)
     {
         editDataList = editSql ;
+        this.context = context ;
     }
 
 
-    public static class  MyHolder extends RecyclerView.ViewHolder
+    public  class  MyHolder extends RecyclerView.ViewHolder
     {
+        ImageView ImageAnimaId ;
         TextView listItemTime ;
         TextView listItemImage ;
         TextView listItemTitle ;
+        MyScrollView hScrollView ;
+        ViewGroup recyclerItemRelayout ;
+        public TextView btn_Set;
+        public TextView btn_Delete;
+
+        @SuppressLint("WrongViewCast")
+        @RequiresApi(api = Build.VERSION_CODES.M)
         public MyHolder(View itemView) {
             super(itemView);
             listItemImage = itemView.findViewById(R.id.listItemImage)  ;
             listItemTime = itemView.findViewById(R.id.listItemTime) ;
             listItemTitle = itemView.findViewById(R.id.listItemTitle) ;
+            hScrollView = itemView.findViewById(R.id.hScrollView) ;
+            recyclerItemRelayout = itemView.findViewById(R.id.recyclerItemRelayout) ;
+            ImageAnimaId = itemView.findViewById(R.id.ImageAnimaId);
+            btn_Set=itemView.findViewById(R.id.settingText) ;
+            btn_Delete = itemView.findViewById(R.id.deleteText) ;
+            ((MyScrollView) itemView).setSlidingButtonListener(RecyclerAdapter.this);
+
         }
 
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public  MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent , false) ;
         final MyHolder myHolder = new MyHolder(view) ;
 
+        //左滑设置点击事件
+        myHolder.btn_Set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int n = myHolder.getLayoutPosition();
+                Toast.makeText(view.getContext() , "SETTING" ,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //左滑删除点击事件
+        myHolder.btn_Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int n = myHolder.getLayoutPosition();
+                Toast.makeText(view.getContext() , "DELETE" ,Toast.LENGTH_SHORT).show();
+            }
+        });
         myHolder.listItemImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +161,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
                 intent.putExtra("data" , data) ;
                 intent.putExtra("id" , id) ;
                 context.startActivity(intent);
-                Toast.makeText(context , "点击了第" + position +"项" ,Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context , "点击了第" + position +"项" ,Toast.LENGTH_SHORT).show();
             }
         }
         ItemClick itemClick = new ItemClick() ;
@@ -250,7 +294,11 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
     public void onBindViewHolder(MyHolder holder, int position) {
         EditSql  editSql = editDataList.get(position) ;
         boolean isCollect = editSql.getIsCollected() ;
-       // Log.i("TAG" , "isCollect is " + isCollect)  ;
+
+
+        holder.recyclerItemRelayout.getLayoutParams().width = Utils.getScreenWidth(context) - 230;
+
+        // Log.i("TAG" , "isCollect is " + isCollect)  ;
         String collect ;
         if (!isCollect)
         {
@@ -271,7 +319,49 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         return editDataList.size();
     }
 
+    /**
+     * 删除菜单打开信息接收
+     */
+    @Override
+    public void onMenuIsOpen(View view) {
+        mMenu = (MyScrollView) view;
+    }
 
+
+    /**
+     * 滑动或者点击了Item监听
+     *
+     * @param leftSlideView
+     */
+    @Override
+    public void onDownOrMove(MyScrollView leftSlideView) {
+        if (menuIsOpen()) {
+            if (mMenu != leftSlideView) {
+                closeMenu();
+            }
+        }
+    }
+
+    /**
+     * 关闭菜单
+     */
+    public void closeMenu() {
+        mMenu.closeMenu();
+        mMenu = null;
+
+    }
+
+    /**
+     * 判断菜单是否打开
+     *
+     * @return
+     */
+    public Boolean menuIsOpen() {
+        if (mMenu != null) {
+            return true;
+        }
+        return false;
+    }
 
 
 }

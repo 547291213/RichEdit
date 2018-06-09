@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -49,16 +50,22 @@ import io.github.mthli.knife.KnifeText;
  */
 
 public class HomeFragment extends Fragment {
+    private static final String TAG = "HomeFragment" ;
     private RecyclerView recyclerview ;
     private List<EditSql> editSql ;
     private AdapterData adapterData ;
     private KnifeText knifeText ;
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
+    private HorizontalScrollView hScrollView ;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.home_fragment , null) ;
         recyclerview = (RecyclerView)view.findViewById(R.id.homeListView) ;
+
+
+
         init() ;
 
         return  view;
@@ -118,7 +125,7 @@ public class HomeFragment extends Fragment {
                 editSql.add(ee) ;
             }
         }
-        adapterData = new AdapterData(editSql) ;
+        adapterData = new AdapterData(editSql , getContext()) ;
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) ;
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -130,8 +137,9 @@ public class HomeFragment extends Fragment {
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider));
         recyclerview.addItemDecoration(divider);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
-        recyclerview.setHasFixedSize(true);
-        recyclerview.setItemAnimator(new DefaultItemAnimator());
+//        recyclerview.setNestedScrollingEnabled(true);
+//        recyclerview.setHasFixedSize(true);
+
         recyclerview.setAdapter(adapterData);
     }
 
@@ -167,7 +175,7 @@ public class HomeFragment extends Fragment {
         {
             editSqlList.add(ee) ;
         }
-        adapterData = new AdapterData(editSqlList) ;
+        adapterData = new AdapterData(editSqlList , getContext()) ;
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) ;
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -193,8 +201,8 @@ public class HomeFragment extends Fragment {
     RecyclerAdapter
      */
     public class AdapterData extends RecyclerAdapter {
-        public AdapterData(List<EditSql> editSql) {
-            super(editSql);
+        public AdapterData(List<EditSql> editSql , Context mContext) {
+            super(editSql , mContext);
         }
     }
 

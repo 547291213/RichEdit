@@ -1,55 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
+<com.example.xkfeng.richedit.RecyclerViewPackage.MyScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="65dp"
+    android:layout_width="match_parent"
     android:layout_marginTop="10dp"
+    android:fillViewport="true"
+    android:id="@+id/hScrollView"
+
     >
-    <ImageView
-        android:id="@+id/ImageAnimaId"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:src="@drawable/edit"
-        android:scaleType="centerInside"
-        android:layout_gravity="center"
-        />
-    <RelativeLayout
-        android:layout_marginLeft="10dp"
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:orientation="horizontal"
+        android:layout_height="65dp"
 
-        <TextView
-            android:id="@+id/listItemTime"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:textSize="15dp"
-            android:layout_marginTop="5dp"
 
+        >
+        <ImageView
+            android:id="@+id/ImageAnimaId"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:src="@drawable/edit"
+            android:scaleType="centerInside"
+            android:layout_gravity="center"
             />
-        <TextView
-            android:id="@+id/listItemImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:text="收藏"
-            android:textSize="15dp"
-            android:textColor="#ed4255"
-            />
-        <TextView
-            android:id="@+id/listItemTitle"
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:textSize="22dp"
-            android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="7dp"
-            />
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/settingText"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_toRightOf="@id/recyclerItemRelayout"
+                android:text="置顶"
+                android:textSize="20sp"
+                android:background="@drawable/orange_background"
+                android:textColor="#ffffff"
+                />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/deleteText"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:text="删除"
+                android:layout_toRightOf="@id/settingText"
+                android:textColor="#ffffff"
+                android:background="@drawable/pink_background"
 
-</LinearLayout>
+                />
+        <RelativeLayout
+            android:id="@+id/recyclerItemRelayout"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:id="@+id/listItemTime"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+
+                />
+
+            <TextView
+                android:id="@+id/listItemImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:text="收藏"
+                android:textColor="#ed4255"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/listItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="22dp" />
+
+
+        </RelativeLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+</com.example.xkfeng.richedit.RecyclerViewPackage.MyScrollView>
+
