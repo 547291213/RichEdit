@@ -136,12 +136,18 @@ public class MyScrollView extends HorizontalScrollView {
           //  Log.i("CHANGESCROLLX" , "MOVE" + mScrollWidth) ;
 
             mIonSlidingButtonListener.onMenuIsOpen(this);
-        } else {
+        }
+        else {
 
             //设置图片可见，然后启动动画
             editImage.setVisibility(VISIBLE);
             //Log.i("CHANGESCROLLX" , "SMOOTH" + mScrollWidth) ;
             Animation animation = AnimationUtils.loadAnimation(getContext() , R.anim.editimage_anima);
+            /*
+            动画只在菜单菜单打开，关闭时才启动。
+            避免无故右滑启动动画
+             */
+            if (isOpen)
             editImage.startAnimation(animation);
 
             this.smoothScrollTo(0, 0);
