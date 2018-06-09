@@ -5,7 +5,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.xkfeng.richedit.R;
@@ -14,6 +17,8 @@ import com.example.xkfeng.richedit.R;
  * 自定义View,继承水平滚动条
  */
 public class MyScrollView extends HorizontalScrollView {
+
+    private ImageView editImage ; //EditImage
 
     private TextView mTextView_Set;//设置按钮
 
@@ -52,6 +57,7 @@ public class MyScrollView extends HorizontalScrollView {
         if (!once) {
             mTextView_Delete = (TextView) findViewById(R.id.deleteText);
             mTextView_Set = (TextView) findViewById(R.id.settingText);
+            editImage = (ImageView)findViewById(R.id.ImageAnimaId) ;
             once = true;
         }
     }
@@ -108,21 +114,36 @@ public class MyScrollView extends HorizontalScrollView {
     }
 
 
-    /**
+    /**By CSDN
      * 6.按滚动条被拖动距离判断关闭或打开菜单
      * getScrollX()                view的左上角相对于母视图的左上角的X轴偏移量
      * smoothScrollTo(x, y);        参数：相对于ScrollView左上角的位置来说，你要移动的位置
+     *
+     * By KEFENG
+     * 在每次滑动出去的时候设置EditImage隐藏，这样在滑动回来的时候给EditImage设置的动画效果更佳平滑，优美
+     *
      */
     public void changeScrollx() {
         Log.i("CHANGESCROLLX" , "IN + " + getScrollX()) ;
         if (getScrollX() >= (mScrollWidth / 2)) {
+
+
             this.smoothScrollTo(mScrollWidth, 0);
             isOpen = true;
 
+            //设置图片不可见，但是仍让占据相应位置
+            editImage.setVisibility(INVISIBLE);
           //  Log.i("CHANGESCROLLX" , "MOVE" + mScrollWidth) ;
+
             mIonSlidingButtonListener.onMenuIsOpen(this);
         } else {
+
+            //设置图片可见，然后启动动画
+            editImage.setVisibility(VISIBLE);
             //Log.i("CHANGESCROLLX" , "SMOOTH" + mScrollWidth) ;
+            Animation animation = AnimationUtils.loadAnimation(getContext() , R.anim.editimage_anima);
+            editImage.startAnimation(animation);
+
             this.smoothScrollTo(0, 0);
             isOpen = false;
 
@@ -139,6 +160,7 @@ public class MyScrollView extends HorizontalScrollView {
         this.smoothScrollTo(mScrollWidth, 0);//相对于原来没有滑动的位置x轴方向偏移了mScrollWidth，y轴方向没有变化。
         isOpen = true;
         mIonSlidingButtonListener.onMenuIsOpen(this);
+
     }
 
     /**
@@ -148,8 +170,10 @@ public class MyScrollView extends HorizontalScrollView {
         if (!isOpen) {
             return;
         }
+
         this.smoothScrollTo(0, 0);//相对于原来没有滑动的位置,x轴方向、y轴方向都没有变化，即回到原来的位置了。
         isOpen = false;
+
     }
 
 

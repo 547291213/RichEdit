@@ -19,6 +19,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -46,7 +48,7 @@ import java.util.List;
 public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHolder> implements MyScrollView.IonSlidingButtonListener{
     private  List<EditSql> editDataList;//对象列表
 
-
+    private Animation animation ;
     private Context context ;
     private MyScrollView mMenu = null;
     public  RecyclerAdapter(List<EditSql> editSql ,Context context)
@@ -188,6 +190,37 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         return myHolder;
     }
 
+    @Override
+    public void onBindViewHolder(MyHolder holder, int position) {
+        EditSql  editSql = editDataList.get(position) ;
+        boolean isCollect = editSql.getIsCollected() ;
+
+
+
+        holder.recyclerItemRelayout.getLayoutParams().width = Utils.getScreenWidth(context) - 230;
+
+        // Log.i("TAG" , "isCollect is " + isCollect)  ;
+        String collect ;
+        if (!isCollect)
+        {
+            collect="收藏" ;
+        }else {
+            collect="已收藏" ;
+        }
+        holder.listItemTime.setText(editSql.getCreate_time());
+        holder.listItemImage.setText(collect);
+        holder.listItemTitle.setText(editSql.getTitle());
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        //  Log.i("RecyclerAdapter" , "SIZE IS " + editDataList.size())  ;
+        return editDataList.size();
+    }
+
+
     private void SendBroadCast()
     {
         if (MainActivity.CURRENT_PAGE == 1)
@@ -290,34 +323,6 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         popupMenu.show();
     }
 
-    @Override
-    public void onBindViewHolder(MyHolder holder, int position) {
-        EditSql  editSql = editDataList.get(position) ;
-        boolean isCollect = editSql.getIsCollected() ;
-
-
-        holder.recyclerItemRelayout.getLayoutParams().width = Utils.getScreenWidth(context) - 230;
-
-        // Log.i("TAG" , "isCollect is " + isCollect)  ;
-        String collect ;
-        if (!isCollect)
-        {
-            collect="收藏" ;
-        }else {
-            collect="已收藏" ;
-        }
-        holder.listItemTime.setText(editSql.getCreate_time());
-        holder.listItemImage.setText(collect);
-        holder.listItemTitle.setText(editSql.getTitle());
-
-
-    }
-
-    @Override
-    public int getItemCount() {
-        //  Log.i("RecyclerAdapter" , "SIZE IS " + editDataList.size())  ;
-        return editDataList.size();
-    }
 
     /**
      * 删除菜单打开信息接收
@@ -325,6 +330,8 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
     @Override
     public void onMenuIsOpen(View view) {
         mMenu = (MyScrollView) view;
+
+
     }
 
 
