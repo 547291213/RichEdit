@@ -17,6 +17,7 @@
         android:overScrollMode="ifContentScrolls"
         android:scrollbars="vertical"
         android:orientation="vertical"
+
         >
 
     </android.support.v7.widget.RecyclerView>

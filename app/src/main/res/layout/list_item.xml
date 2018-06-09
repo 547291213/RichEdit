@@ -7,11 +7,13 @@
     android:layout_marginTop="10dp"
     android:fillViewport="true"
     android:id="@+id/hScrollView"
+    android:descendantFocusability="beforeDescendants"
 
     >
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/lineMainlayout"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="65dp"
@@ -33,19 +35,20 @@
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/settingText"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_toRightOf="@id/recyclerItemRelayout"
                 android:text="置顶"
                 android:textSize="20sp"
+                android:padding="3dp"
                 android:background="@drawable/orange_background"
                 android:textColor="#ffffff"
                 />
 
             <TextView
                 android:id="@+id/deleteText"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textSize="20sp"
                 android:gravity="center"
@@ -53,13 +56,22 @@
                 android:layout_toRightOf="@id/settingText"
                 android:textColor="#ffffff"
                 android:background="@drawable/pink_background"
+                android:padding="3dp"
 
                 />
-        <RelativeLayout
-            android:id="@+id/recyclerItemRelayout"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginLeft="10dp">
+
+            <!--让RelativeLayout优先于其子控件获取焦点，优先处理事件，-->
+            <!--完成settingText  text数据的更新-->
+            <!--android:descendantFocusability="beforeDescendants"-->
+
+            <RelativeLayout
+                android:id="@+id/recyclerItemRelayout"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginLeft="10dp"
+                android:descendantFocusability="beforeDescendants"
+
+            >
 
             <TextView
                 android:id="@+id/listItemTime"

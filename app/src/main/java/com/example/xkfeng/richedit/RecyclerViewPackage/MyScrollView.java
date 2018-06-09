@@ -70,9 +70,10 @@ public class MyScrollView extends HorizontalScrollView {
         if (changed) {
             this.scrollTo(0, 0);
 
+            Log.i("RECYCLERVIEW" , "ONLAYOUT") ;
             //获取水平滚动条可以滑动的范围，即右侧“设置”、“删除”按钮的总宽度
             mScrollWidth = mTextView_Delete.getWidth()+ mTextView_Set.getWidth();
-            Log.i("CHANGESCROLLX" , "WIDTH IS " + mScrollWidth + " TEXT IS " + mTextView_Delete.getText().toString()+80) ;
+           // Log.i("CHANGESCROLLX" , "WIDTH IS " + mScrollWidth + " TEXT IS " + mTextView_Delete.getText().toString()+80) ;
         }
     }
 
@@ -81,7 +82,7 @@ public class MyScrollView extends HorizontalScrollView {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         int action = ev.getAction();
-
+        Log.i("RECYCLERVIEW" ,"MYSCROLLVIEW TOUCH") ;
         switch (action) {
             case MotionEvent.ACTION_DOWN://按下
             case MotionEvent.ACTION_MOVE://移动
@@ -110,7 +111,7 @@ public class MyScrollView extends HorizontalScrollView {
         super.onScrollChanged(l, t, oldl, oldt);
 
         //改变view的在x轴方向的位置
-        mTextView_Delete.setTranslationX(1);
+        mTextView_Set.setTranslationX(1);
     }
 
 
@@ -124,9 +125,10 @@ public class MyScrollView extends HorizontalScrollView {
      *
      */
     public void changeScrollx() {
-        Log.i("CHANGESCROLLX" , "IN + " + getScrollX()) ;
+        //Log.i("CHANGESCROLLX" , "IN + " + getScrollX()) ;
         if (getScrollX() >= (mScrollWidth / 2)) {
 
+            mScrollWidth = mTextView_Delete.getWidth()+ mTextView_Set.getWidth();
 
             this.smoothScrollTo(mScrollWidth, 0);
             isOpen = true;

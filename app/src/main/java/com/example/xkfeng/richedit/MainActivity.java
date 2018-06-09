@@ -52,6 +52,7 @@ import com.example.xkfeng.richedit.Fragment.CollectionFragment;
 import com.example.xkfeng.richedit.Fragment.HomeFragment;
 import com.example.xkfeng.richedit.Fragment.SetFragemnt;
 import com.example.xkfeng.richedit.Fragment.TipFragment;
+import com.example.xkfeng.richedit.RecyclerViewPackage.RecyclerAdapter;
 import com.example.xkfeng.richedit.ServicePackage.UpdateService;
 import com.example.xkfeng.richedit.StaticElement.StateElement;
 
@@ -63,7 +64,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener ,RecyclerAdapter.IonSlidingViewClickListener {
 
     public static int RELATIVELAYOUT_STATE =  0 ;  // 0表示不需要启动RelativeLayout的监听事件调用Layout 1表示需要调用Layout方法
     public static int MODE_STATE = 0 ;  // 0 表示日间模式 ， 1表示夜间模式
@@ -518,6 +519,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return imageUri ;
+    }
+
+    @Override
+    public void onDeleteBtnCilck(View view, int position) {
+        if (CURRENT_PAGE == 1)
+        {
+            homeFragment.onDeleteBtnCilck(view , position);
+        }else {
+            collectionFragment.onDeleteBtnCilck(view , position);
+        }
+    }
+
+    @Override
+    public void onSetBtnCilck(View view, int position) {
+        if (CURRENT_PAGE == 1)
+        {
+            homeFragment.onSetBtnCilck(view , position);
+        }else {
+            collectionFragment.onSetBtnCilck(view , position);
+        }
     }
 
     /*

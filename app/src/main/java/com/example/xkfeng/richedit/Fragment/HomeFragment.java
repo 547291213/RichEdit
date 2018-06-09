@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.example.xkfeng.richedit.EditActivity;
 import com.example.xkfeng.richedit.JavaBean.EditSql;
@@ -49,7 +50,7 @@ import io.github.mthli.knife.KnifeText;
  * Created by initializing on 2018/5/9.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecyclerAdapter.IonSlidingViewClickListener {
     private static final String TAG = "HomeFragment" ;
     private RecyclerView recyclerview ;
     private List<EditSql> editSql ;
@@ -197,6 +198,19 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
+    @Override
+    public void onDeleteBtnCilck(View view, int position) {
+
+        Toast.makeText(getContext() , "HOME DELETE" , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSetBtnCilck(View view, int position) {
+
+        Toast.makeText(getContext() , "HOME SET" , Toast.LENGTH_SHORT).show();
+    }
+
     /*
     RecyclerAdapter
      */

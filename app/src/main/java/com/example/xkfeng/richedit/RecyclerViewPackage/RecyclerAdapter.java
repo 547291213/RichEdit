@@ -47,7 +47,9 @@ import java.util.List;
 
 public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHolder> implements MyScrollView.IonSlidingButtonListener{
     private  List<EditSql> editDataList;//对象列表
+    private IonSlidingViewClickListener mIDeleteBtnClickListener;
 
+    private IonSlidingViewClickListener mISetBtnClickListener;
     private Animation animation ;
     private Context context ;
     private MyScrollView mMenu = null;
@@ -55,6 +57,9 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
     {
         editDataList = editSql ;
         this.context = context ;
+
+        mIDeleteBtnClickListener = (IonSlidingViewClickListener) context;
+        mISetBtnClickListener = (IonSlidingViewClickListener) context;
     }
 
 
@@ -95,12 +100,30 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent , false) ;
         final MyHolder myHolder = new MyHolder(view) ;
 
+        myHolder.hScrollView.setOnTouchListener(new MyScrollView.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("RECYCLERVIEW" , "RECYCLERVIEW ONTOUCH") ;
+                EditSql editSql1 = editDataList.get(myHolder.getLayoutPosition()) ;
+                if (editSql1.getIsTop())
+                {
+
+                    myHolder.btn_Set.setText("取消置顶");
+                }else {
+
+                    myHolder.btn_Set.setText("置顶");
+                }
+                return false;
+            }
+        });
+
+
         //左滑设置点击事件
         myHolder.btn_Set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int n = myHolder.getLayoutPosition();
-                Toast.makeText(view.getContext() , "SETTING" ,Toast.LENGTH_SHORT).show();
+                mIDeleteBtnClickListener.onSetBtnCilck(view , n);
             }
         });
 
@@ -109,7 +132,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
             @Override
             public void onClick(View view) {
                 int n = myHolder.getLayoutPosition();
-                Toast.makeText(view.getContext() , "DELETE" ,Toast.LENGTH_SHORT).show();
+                mIDeleteBtnClickListener.onDeleteBtnCilck(view, n);
             }
         });
         myHolder.listItemImage.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +174,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
             @Override
             public void onClick(View v) {
 
+
                 //设置为修改数据模式
                 MainActivity.EDIT_STATE = 2 ;
 
@@ -173,6 +197,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         class ItemLongClick implements View.OnLongClickListener {
             @Override
             public boolean onLongClick(View v) {
+
                 int position = myHolder.getAdapterPosition() ;
                 showPopMenu(v,position) ;
                 return  true ;
@@ -184,20 +209,21 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         myHolder.listItemTitle.setOnLongClickListener(itemLongClick);
         myHolder.listItemTime.setOnLongClickListener(itemLongClick);
 
-
+        myHolder.recyclerItemRelayout.setOnLongClickListener(itemLongClick);
 
         context = parent.getContext() ;
         return myHolder;
     }
 
     @Override
-    public void onBindViewHolder(MyHolder holder, int position) {
+    public void onBindViewHolder(final MyHolder holder, final int position) {
         EditSql  editSql = editDataList.get(position) ;
         boolean isCollect = editSql.getIsCollected() ;
 
 
 
         holder.recyclerItemRelayout.getLayoutParams().width = Utils.getScreenWidth(context) - 230;
+
 
         // Log.i("TAG" , "isCollect is " + isCollect)  ;
         String collect ;
@@ -368,6 +394,17 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
             return true;
         }
         return false;
+    }
+
+    /**
+     * 注册接口的方法：点击事件。在Mactivity.java实现这些方法。
+     */
+    public interface IonSlidingViewClickListener {
+//        void onItemClick(View view, int position);//点击item正文
+
+        void onDeleteBtnCilck(View view, int position);//点击“删除”
+
+        void onSetBtnCilck(View view, int position);//点击“设置”
     }
 
 
