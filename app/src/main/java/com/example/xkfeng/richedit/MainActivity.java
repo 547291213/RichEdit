@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bitmap bitmap = null;
 
             try {
-                Log.i(TAG,imageUri.toString()) ;
+             //   Log.i(TAG,imageUri.toString()) ;
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri)) ;
 
                 bitmap = BitmapFactory.decodeFile(preferences.getString("image" ,"null")) ;
@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (RELATIVELAYOUT_STATE == 1)
                 {
                     drawer_relayout.layout(setFragment.getView().getRight(), 0,  setFragment.getView().getRight() + display.getWidth(), display.getHeight()+30);
-                    Log.i(TAG , "LAYOUT") ;
+                 //   Log.i(TAG , "LAYOUT") ;
                 }
 
 
@@ -392,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             @Override
             public void onDrawerOpened(View drawerView) {
-                Log.i(TAG , "on OPENED " + drawer_relayout.getLeft() + " " + display.getHeight() ) ;
+          //      Log.i(TAG , "on OPENED " + drawer_relayout.getLeft() + " " + display.getHeight() ) ;
 
                 searchView.setFocusable(false);
                 searchView.setEnabled(false);
@@ -437,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (v.getId() == R.id.addText)
         {
 
-            Log.e(TAG, "click addText") ;
+           // Log.e(TAG, "click addText") ;
             Intent intent = new Intent(MainActivity.this , EditActivity.class) ;
             startActivity(intent);
         }
@@ -504,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
       //  setFragment.onActivityResult(requestCode , resultCode ,data);
-        Log.i(TAG,"返回到MainActivity") ;
+    //    Log.i(TAG,"返回到MainActivity") ;
 
     }
 
@@ -591,7 +591,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 return  ;
             }
-            if(MODE_STATE == 1 )
+            else if(MODE_STATE == 1 )
             {
                 searchView.setBackground(getResources().getDrawable(R.drawable.night));
                 frameLayout.setBackground(getResources().getDrawable(R.drawable.night));
@@ -653,7 +653,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void requestLocation(){
 
-        Log.i(TAG , "REQUESTLOCATION") ;
+       // Log.i(TAG , "REQUESTLOCATION") ;
         initLocation();
         mLocationClient.start();
     }

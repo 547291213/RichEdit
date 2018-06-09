@@ -313,7 +313,6 @@ public class SetFragemnt extends Fragment {
     private void UpdateUiMode()
     {
         navigationView.setCheckedItem(R.id.navNight);
-
         if (MainActivity.MODE_STATE == 0)
         {
             navigationView.setBackground(getContext().getResources().getDrawable(R.drawable.morn));

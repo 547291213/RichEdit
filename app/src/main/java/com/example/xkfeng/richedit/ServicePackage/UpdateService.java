@@ -9,6 +9,8 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.xkfeng.richedit.MainActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -34,19 +36,28 @@ public class UpdateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        /*
+        获取当前小时数，为24进制表示
+         */
         SimpleDateFormat formatter   =   new   SimpleDateFormat   ("HH");
         Date curDate =  new Date(System.currentTimeMillis());
         int mHour = Integer.parseInt(formatter.format(curDate)) ;
         Log.i(TAG , "CURRENT TIME IS " + mHour) ;
+        /*
+        1 根据当前的事件，做出模式的切换
+        2 定时启动该服务，去判断是否需要切换模式
+
+         */
         if (mHour >= 7 && mHour<=19)
         {
-
+            MainActivity.MODE_STATE = 0 ;
             Intent intent1 = new Intent("com.example.richedit.changemodecast");
             intent1.putExtra("DATE" , "MORN") ;
             intent1.addCategory("updateUimodeByService");
 
             sendBroadcast(intent1);
         }else {
+            MainActivity.MODE_STATE = 1 ;
             Intent intent1 = new Intent("com.example.richedit.changemodecast");
             intent1.putExtra("DATE" , "NIGHT") ;
             intent1.addCategory("updateUimodeByService");
