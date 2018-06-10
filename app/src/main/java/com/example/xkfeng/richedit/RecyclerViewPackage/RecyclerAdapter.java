@@ -151,7 +151,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
                 notifyItemRemoved(myHolder.getLayoutPosition());
                 editDataList.remove(myHolder.getLayoutPosition()) ;
                 //发送广播
-                SendBroadCast();
+            //    SendBroadCast();
           //      mIDeleteBtnClickListener.onDeleteBtnCilck(view, n);
             }
         });
@@ -318,7 +318,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
                     notifyItemRemoved(pos);
                     editDataList.remove(pos) ;
                     //发送广播
-                    SendBroadCast();
+                    //SendBroadCast();
                     return true;
                 }
                 else if (item.getItemId() == R.id.topItem)
@@ -340,6 +340,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
                         editSql.update(editSql.getId()) ;
                         editSql.save() ;
                     }
+                    notifyItemChanged(pos);
                     //发送广播
                     SendBroadCast();
 
