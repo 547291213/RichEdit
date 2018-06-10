@@ -149,7 +149,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
                 EditSql editSql = editDataList.get(myHolder.getLayoutPosition()) ;
                 DataSupport.delete(EditSql.class ,editSql.getId()) ;
                 notifyItemRemoved(myHolder.getLayoutPosition());
-                editDataList.remove(myHolder.getAdapterPosition()) ;
+                editDataList.remove(myHolder.getLayoutPosition()) ;
                 //发送广播
                 SendBroadCast();
           //      mIDeleteBtnClickListener.onDeleteBtnCilck(view, n);
