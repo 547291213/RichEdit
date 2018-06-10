@@ -47,9 +47,7 @@ import java.util.List;
 
 public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHolder> implements MyScrollView.IonSlidingButtonListener{
     private  List<EditSql> editDataList;//对象列表
-    private IonSlidingViewClickListener mIDeleteBtnClickListener;
 
-    private IonSlidingViewClickListener mISetBtnClickListener;
     private Animation animation ;
     private Context context ;
     private MyScrollView mMenu = null;
@@ -58,8 +56,6 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         editDataList = editSql ;
         this.context = context ;
 
-        mIDeleteBtnClickListener = (IonSlidingViewClickListener) context;
-        mISetBtnClickListener = (IonSlidingViewClickListener) context;
     }
 
 
@@ -95,7 +91,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public  MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public  MyHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent , false) ;
         final MyHolder myHolder = new MyHolder(view) ;
@@ -123,7 +119,24 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
             @Override
             public void onClick(View view) {
                 int n = myHolder.getLayoutPosition();
-                mIDeleteBtnClickListener.onSetBtnCilck(view , n);
+                EditSql editSql = editDataList.get(myHolder.getLayoutPosition()) ;
+                if (editSql.getIsTop())
+                {
+                    editSql.setTop(false);
+                    editSql.setUpdate_time(EditActivity.getTime());
+                    editSql.update(editSql.getId()) ;
+                    editSql.save() ;
+
+                }else{
+                    editSql.setTop(true);
+                    editSql.setUpdate_time(EditActivity.getTime());
+                    editSql.update(editSql.getId()) ;
+                    editSql.save() ;
+                }
+                notifyDataSetChanged();
+                //发送广播
+                SendBroadCast();
+                // mIDeleteBtnClickListener.onSetBtnCilck(view , n);
             }
         });
 
@@ -132,7 +145,14 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
             @Override
             public void onClick(View view) {
                 int n = myHolder.getLayoutPosition();
-                mIDeleteBtnClickListener.onDeleteBtnCilck(view, n);
+                //移除操作
+                EditSql editSql = editDataList.get(myHolder.getLayoutPosition()) ;
+                DataSupport.delete(EditSql.class ,editSql.getId()) ;
+                notifyItemRemoved(myHolder.getLayoutPosition());
+                editDataList.remove(myHolder.getAdapterPosition()) ;
+                //发送广播
+                SendBroadCast();
+          //      mIDeleteBtnClickListener.onDeleteBtnCilck(view, n);
             }
         });
         myHolder.listItemImage.setOnClickListener(new View.OnClickListener() {
@@ -395,17 +415,5 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         }
         return false;
     }
-
-    /**
-     * 注册接口的方法：点击事件。在Mactivity.java实现这些方法。
-     */
-    public interface IonSlidingViewClickListener {
-//        void onItemClick(View view, int position);//点击item正文
-
-        void onDeleteBtnCilck(View view, int position);//点击“删除”
-
-        void onSetBtnCilck(View view, int position);//点击“设置”
-    }
-
 
 }

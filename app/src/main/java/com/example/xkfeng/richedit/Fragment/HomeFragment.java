@@ -50,14 +50,14 @@ import io.github.mthli.knife.KnifeText;
  * Created by initializing on 2018/5/9.
  */
 
-public class HomeFragment extends Fragment implements RecyclerAdapter.IonSlidingViewClickListener {
+public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment" ;
-    private RecyclerView recyclerview ;
-    private List<EditSql> editSql ;
-    private AdapterData adapterData ;
+    private RecyclerView recyclerview ; //RecyclerView对象
+    private List<EditSql> editSql ;  //Recyclerview列表项集合
+    private AdapterData adapterData ;  //自定义的Recyclerview.Adapter对象
     private KnifeText knifeText ;
 
-    private HorizontalScrollView hScrollView ;
+    private HorizontalScrollView hScrollView ; //自定义的水平滑动对象
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
@@ -199,17 +199,6 @@ public class HomeFragment extends Fragment implements RecyclerAdapter.IonSliding
 
     }
 
-    @Override
-    public void onDeleteBtnCilck(View view, int position) {
-
-        Toast.makeText(getContext() , "HOME DELETE" , Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSetBtnCilck(View view, int position) {
-
-        Toast.makeText(getContext() , "HOME SET" , Toast.LENGTH_SHORT).show();
-    }
 
     /*
     RecyclerAdapter

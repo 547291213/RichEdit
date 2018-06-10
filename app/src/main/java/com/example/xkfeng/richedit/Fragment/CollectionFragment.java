@@ -32,7 +32,7 @@ import java.util.Map;
  * Created by initializing on 2018/5/10.
  */
 
-public class CollectionFragment extends Fragment implements RecyclerAdapter.IonSlidingViewClickListener{
+public class CollectionFragment extends Fragment {
     private RecyclerView recyclerview ;
     private List<EditSql> editSql ;
     private AdapterData adapterData ;
@@ -113,18 +113,6 @@ public class CollectionFragment extends Fragment implements RecyclerAdapter.IonS
 
     }
 
-    @Override
-    public void onDeleteBtnCilck(View view, int position) {
-
-        Toast.makeText(getContext() , "COLLECTION DELETE" , Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSetBtnCilck(View view, int position) {
-
-        Toast.makeText(getContext() , "COLLECTION SET" , Toast.LENGTH_SHORT).show();
-
-    }
 
     public class AdapterData extends RecyclerAdapter {
         public AdapterData(List<EditSql> editSql , Context mContext) {
